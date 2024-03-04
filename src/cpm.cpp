@@ -5,62 +5,9 @@
 #include <algorithm> 
 #include <list>
 #include <numeric> 
-#include <bits/getopt_core.h>
-#include <random>
 
 using namespace std;
 
-// Function to calculate the knowned probability distribution
-unordered_map<char, float> getOriginalProbs(vector<char> originalText) {
-    unordered_map<char, int> symbols;
-    unordered_map<char, float> probabilities;
-
-    for (int i = 0; i < originalText.size(); i++) {
-        char symbol = originalText[i];
-        if (symbols.find(symbol) == symbols.end()) {
-            symbols[symbol] = 1;
-        } else {
-            symbols[symbol]++;
-        }
-    }
-
-    for (auto it = symbols.begin(); it != symbols.end(); it++) {
-        probabilities[it->first] = (float)it->second / originalText.size();
-    }
-
-    return probabilities;
-}
-
-unsigned char selectSymbol(const unordered_map<char, float>& probabilities) {
-    // Step 1: Create a cumulative distribution
-    unordered_map<char, float> cumulativeProbabilities(probabilities.size());
-    float sum = 0.0f;
-    for (const auto& pair : probabilities) {
-        sum += pair.second;
-        cumulativeProbabilities[pair.first] = sum;
-    }
-    cout << "Cumulative probabilities: " << endl;
-    for (auto it = cumulativeProbabilities.begin(); it != cumulativeProbabilities.end(); it++) {
-        cout << it->first << " " << it->second << endl;
-    }
-
-    // Step 2: Generate a random number between 0 and 1
-    random_device rd;
-    mt19937 gen(rd());
-    uniform_real_distribution<> dis(0, 1);
-    double randomValue = dis(gen);
-
-    // Step 3: Find the symbol corresponding to the random value
-    for (int i = 0; i < cumulativeProbabilities.size(); ++i) {
-        if (randomValue <= cumulativeProbabilities[i]) {
-            cout << "Random value: " << randomValue << " Selected symbol: " << i << endl;
-            return i;
-        }
-    }
-    cout << "dif Random value: " << randomValue << " Selected symbol: " << static_cast<unsigned char>(probabilities.size() - 1) << endl;
-    // Fallback in case of rounding errors, should not be reached
-    return static_cast<unsigned char>(probabilities.size() - 1);
-}
 
 int main(int argc, char* argv[]) {
     const char* filename = argv[1];
@@ -116,33 +63,32 @@ int main(int argc, char* argv[]) {
 
     int hits = 0, misses = 0;
     double totalBits = 0.0;
-    int pointer; 
+    int pointer = 0; 
     bool searchTable = true;
+    double hitRate;
 
-    unordered_map<char, float> initialProbs = getOriginalProbs(originalText);
     char predicted;
 
     for (int i = 0; i < originalText.size(); i++) {
         if (i < k) {
-            predicted = selectSymbol(initialProbs);
+            predicted = originalText[i];
 
         } else {
             if (searchTable && kStringPositions.find(currentKString) == kStringPositions.end()) {
                 kStringPositions[currentKString] = {i};
-                predicted = selectSymbol(initialProbs);
-                pointer = i - 1;
-                
+                predicted = originalText[i]; 
             } else if (searchTable) {
                 pointer = kStringPositions[currentKString].front();
                 predicted = predictedText[pointer + 1];
                 kStringPositions[currentKString].push_back(i);
             } else {
-                predicted = predictedText[pointer + 1];
+                predicted = predictedText[++pointer];
                 kStringPositions[currentKString].push_back(i);
             }
             currentKString.erase(0, 1);
         }
         currentKString += predicted;
+        cout << "K String: " << currentKString << endl;
         predictedText.push_back(predicted);
 
         if (predicted == originalText[i]) {
@@ -150,17 +96,12 @@ int main(int argc, char* argv[]) {
         } else {
             ++misses;
         }
+        cout << "Hits: " << hits << " Misses: " << misses << endl;
 
-        double hitRate = (hits + alpha) / (hits + misses + 2 * alpha);
+        hitRate = (hits + alpha) / (hits + misses + 2 * alpha);
+        cout << "Hit rate: " << hitRate << endl;
 
-        if (hitRate < threshold && i >= k) {
-            searchTable = true;
-            if (!kStringPositions[currentKString].empty()) {
-                kStringPositions[currentKString].pop_front();
-            }
-        } else {
-            searchTable = false;
-        }
+        searchTable = (hitRate >= threshold && i >= k) ? false : true;
     }
     cout << "Predicted text: " << endl;
     for (int i = 0; i < predictedText.size(); i++) {
@@ -169,6 +110,57 @@ int main(int argc, char* argv[]) {
 
     return 0;
 }
+// Function to calculate the knowned probability distribution
+// unordered_map<char, float> getOriginalProbs(vector<char> originalText) {
+//     unordered_map<char, int> symbols;
+//     unordered_map<char, float> probabilities;
+
+//     for (int i = 0; i < originalText.size(); i++) {
+//         char symbol = originalText[i];
+//         if (symbols.find(symbol) == symbols.end()) {
+//             symbols[symbol] = 1;
+//         } else {
+//             symbols[symbol]++;
+//         }
+//     }
+
+//     for (auto it = symbols.begin(); it != symbols.end(); it++) {
+//         probabilities[it->first] = (float)it->second / originalText.size();
+//     }
+
+//     return probabilities;
+// }
+
+// unsigned char selectSymbol(const unordered_map<char, float>& probabilities) {
+//     // Step 1: Create a cumulative distribution
+//     unordered_map<char, float> cumulativeProbabilities(probabilities.size());
+//     float sum = 0.0f;
+//     for (const auto& pair : probabilities) {
+//         sum += pair.second;
+//         cumulativeProbabilities[pair.first] = sum;
+//     }
+//     cout << "Cumulative probabilities: " << endl;
+//     for (auto it = cumulativeProbabilities.begin(); it != cumulativeProbabilities.end(); it++) {
+//         cout << it->first << " " << it->second << endl;
+//     }
+
+//     // Step 2: Generate a random number between 0 and 1
+//     random_device rd;
+//     mt19937 gen(rd());
+//     uniform_real_distribution<> dis(0, 1);
+//     double randomValue = dis(gen);
+
+//     // Step 3: Find the symbol corresponding to the random value
+//     for (int i = 0; i < cumulativeProbabilities.size(); ++i) {
+//         if (randomValue <= cumulativeProbabilities[i]) {
+//             cout << "Random value: " << randomValue << " Selected symbol: " << i << endl;
+//             return i;
+//         }
+//     }
+//     cout << "dif Random value: " << randomValue << " Selected symbol: " << static_cast<unsigned char>(probabilities.size() - 1) << endl;
+//     // Fallback in case of rounding errors, should not be reached
+//     return static_cast<unsigned char>(probabilities.size() - 1);
+// }
 
 
     // for (size_t i = 1; i < originalText.size(); ++i) {
