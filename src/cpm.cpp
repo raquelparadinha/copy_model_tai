@@ -5,197 +5,103 @@
 #include <algorithm> 
 #include <list>
 #include <numeric> 
-
-using namespace std;
+#include <bits/getopt_core.h>
+#include "Reader.h"
 
 
 int main(int argc, char* argv[]) {
-    const char* filename = argv[1];
-    int k = 4;
-    float threshold = 0.5; 
-    double alpha = 0.01;
+    std::string filename = "../example/test.txt";
+    int k = 5;
+    int threshold = 3; 
+    int alpha = 1;
 
-    // // Parse command line arguments
-    // int opt;
-    // while((opt = getopt(argc, argv, "f:k:t:a:")) != -1) {
-    //     switch (opt)
-    //     {
-    //     case 'f':
-    //         filename = optarg;
-    //         break;
-    //     case 'k':
-    //         k = atoi(optarg);
-    //         break;
-    //     case 't':
-    //         threshold = atof(optarg);
-    //         break;
-    //     case 'a':
-    //         alpha = atof(optarg);
-    //         break;
-    //     default:
-    //         cerr << "Usage: " << argv[0] << " -f <string> -k <int> -t <float> -a <double>" << endl;
-    //         break;
-    //     }
+    // Parse command line arguments
+    int opt;
+    while((opt = getopt(argc, argv, "fkta")) != -1) {
+        switch (opt)
+        {
+        case 'f':
+            filename = optarg;
+            break;
+        case 'k':
+            k = atoi(optarg);
+            break;
+        case 't':
+            threshold = atoi(optarg);
+            break;
+        case 'a':
+            alpha = atoi(optarg);
+            break;
+        default:
+            std::cerr << "Usage: " << argv[0] << " -f <string> -k <int> -t <int> -a <int>" << std::endl;
+            break;
+        }
 
-    // }
-
-
-    // Open the file
-    ifstream file(filename, ios::binary);
-    if (!file.is_open()) {
-        cerr << "Failed to open file: " << filename << endl;
-        return 1;
     }
+
+    Reader reader(filename);
+    reader.readFile();
+    std::vector<std::pair<char, double>> frequencies = reader.computeFrequencies();
+    std::string originalText = reader.getContent();
+    int fileSize = reader.getTotalLetters();
+
+    std::vector<char> predictedText;
+    std::string currentKString = "";
+    std::unordered_map<std::string, std::list<int>> kStringPositions;
+    std::unordered_map<char, double> symbolProb;
     
-    vector<char> originalText; // Vector to store the symbols read from the file
-
-    // Read the file into a vector
-    char symbol;
-    while (file.read(&symbol, 1)) {
-        originalText.push_back(symbol);
-    }
-    file.close();
-
-    vector<char> predictedText;
-    // vector<string> kStrings;
-    string currentKString = "";
-    unordered_map<string, list<int>> kStringPositions;
-
-    int hits = 0, misses = 0;
-    double totalBits = 0.0;
+    int hits = 0, tries = 0;
+    double totalBits = 0.0, bits;
     int pointer = 0; 
-    bool searchTable = true;
+    bool copyModel = true;
     double hitRate;
+    double comp_prob;
 
     char predicted;
 
-    for (int i = 0; i < originalText.size(); i++) {
+    for (int i = 0; i < fileSize; i++) {
         if (i < k) {
-            predicted = originalText[i];
+            predicted = reader.getRandomSymbol();
 
         } else {
-            if (searchTable && kStringPositions.find(currentKString) == kStringPositions.end()) {
+            if (copyModel && kStringPositions.find(currentKString) == kStringPositions.end()) { 
                 kStringPositions[currentKString] = {i};
-                predicted = originalText[i]; 
-            } else if (searchTable) {
+                predicted = reader.getRandomSymbol(); 
+            } else if (copyModel) {
                 pointer = kStringPositions[currentKString].front();
                 predicted = predictedText[pointer + 1];
                 kStringPositions[currentKString].push_back(i);
-            } else {
+            } else { 
                 predicted = predictedText[++pointer];
                 kStringPositions[currentKString].push_back(i);
             }
             currentKString.erase(0, 1);
         }
         currentKString += predicted;
-        cout << "K String: " << currentKString << endl;
+        std::cout << "K String: " << currentKString << std::endl;
         predictedText.push_back(predicted);
 
+        tries++;
         if (predicted == originalText[i]) {
-            ++hits;
+            hits++;
         } else {
-            ++misses;
+            copyModel = copyModel && hits + threshold < tries;
         }
-        cout << "Hits: " << hits << " Misses: " << misses << endl;
+        std::cout << "Hits: " << hits << " Tries: " << tries << std::endl;
 
-        hitRate = (hits + alpha) / (hits + misses + 2 * alpha);
-        cout << "Hit rate: " << hitRate << endl;
+        hitRate = (hits + alpha) / (tries + 2 * alpha);
+        std::cout << "Hit rate: " << hitRate << std::endl;
 
-        searchTable = (hitRate >= threshold && i >= k) ? false : true;
+        symbolProb[predicted] = (hits + alpha) / (tries + 2 * alpha);
+        comp_prob = (1 - symbolProb[predicted]) / 3;
+        bits = -log2(symbolProb[predicted]);
+        totalBits += bits;
     }
-    cout << "Predicted text: " << endl;
+    std::cout << "Predicted text: " << std::endl;
     for (int i = 0; i < predictedText.size(); i++) {
-        cout << predictedText[i];
+        std::cout << predictedText[i];
     }
+    std::cout << std::endl;
 
     return 0;
 }
-// Function to calculate the knowned probability distribution
-// unordered_map<char, float> getOriginalProbs(vector<char> originalText) {
-//     unordered_map<char, int> symbols;
-//     unordered_map<char, float> probabilities;
-
-//     for (int i = 0; i < originalText.size(); i++) {
-//         char symbol = originalText[i];
-//         if (symbols.find(symbol) == symbols.end()) {
-//             symbols[symbol] = 1;
-//         } else {
-//             symbols[symbol]++;
-//         }
-//     }
-
-//     for (auto it = symbols.begin(); it != symbols.end(); it++) {
-//         probabilities[it->first] = (float)it->second / originalText.size();
-//     }
-
-//     return probabilities;
-// }
-
-// unsigned char selectSymbol(const unordered_map<char, float>& probabilities) {
-//     // Step 1: Create a cumulative distribution
-//     unordered_map<char, float> cumulativeProbabilities(probabilities.size());
-//     float sum = 0.0f;
-//     for (const auto& pair : probabilities) {
-//         sum += pair.second;
-//         cumulativeProbabilities[pair.first] = sum;
-//     }
-//     cout << "Cumulative probabilities: " << endl;
-//     for (auto it = cumulativeProbabilities.begin(); it != cumulativeProbabilities.end(); it++) {
-//         cout << it->first << " " << it->second << endl;
-//     }
-
-//     // Step 2: Generate a random number between 0 and 1
-//     random_device rd;
-//     mt19937 gen(rd());
-//     uniform_real_distribution<> dis(0, 1);
-//     double randomValue = dis(gen);
-
-//     // Step 3: Find the symbol corresponding to the random value
-//     for (int i = 0; i < cumulativeProbabilities.size(); ++i) {
-//         if (randomValue <= cumulativeProbabilities[i]) {
-//             cout << "Random value: " << randomValue << " Selected symbol: " << i << endl;
-//             return i;
-//         }
-//     }
-//     cout << "dif Random value: " << randomValue << " Selected symbol: " << static_cast<unsigned char>(probabilities.size() - 1) << endl;
-//     // Fallback in case of rounding errors, should not be reached
-//     return static_cast<unsigned char>(probabilities.size() - 1);
-// }
-
-
-    // for (size_t i = 1; i < originalText.size(); ++i) {
-    //     // Predict the next symbol based on the pointer's current position
-    //     unsigned char predicted = originalText[pointer]; // Prevent underflow
-    //     unsigned char actual = originalText[i];
-
-    
-
-    //     // Calculate the current hit rate
-    //     double hitRate = static_cast<double>(hits) / (hits + misses);
-
-    //     // Reposition the pointer if performance drops below the threshold
-    //     if (hitRate < threshold && i >= k) {
-    //         bool found = false;
-    //         // Search for a matching sequence in the last k symbols
-    //         for (size_t j = 0; j <= i - k; ++j) {
-    //             if (std::equal(originalText.begin() + j, originalText.begin() + j + k, originalText.begin() + i - k + 1)) {
-    //                 pointer = j;
-    //                 found = true;
-    //                 break;
-    //             }
-    //         }
-    //         if (!found) {
-    //             pointer = i - 1; // Reset to the most recent symbol if no match is found
-    //         }
-    //     }
-
-    //     // Estimate the amount of information needed for this symbol
-    //     double pHit = (hits + alpha) / (hits + misses + 2 * alpha);
-    //     double bitsForSymbol = -log2(pHit);
-    //     totalBits += bitsForSymbol;
-    // }
-
-    // Output results
-    // std::cout << "Hits: " << hits << ", Misses: " << misses << std::endl;
-    // std::cout << "Estimated total bits: " << totalBits << std::endl;
-    // std::cout << "Average bits per symbol: " << totalBits / originalText.size() << std::endl;
