@@ -5,7 +5,7 @@
 #include <algorithm> 
 #include <list>
 #include <numeric> 
-#include <bits/getopt_core.h>
+#include <unistd.h>
 #include "Reader.h"
 
 
@@ -49,6 +49,19 @@ int main(int argc, char* argv[]) {
     std::string currentKString = "";
     std::unordered_map<std::string, std::list<int>> kStringPositions;
     std::unordered_map<char, double> symbolProb;
+    std::unordered_map<char, std::array<int, 2>> symbolStats;
+
+    std::vector<char> keys;
+    for (const auto& pair : frequencies) {
+        keys.push_back(pair.first);
+    }
+
+    for (int i = 0; i < keys.size(); ++i) {
+        symbolStats[keys[i]] = {0,0};  // Assign value (i squared) to the key i
+    }
+
+
+
     
     int hits = 0, tries = 0;
     double totalBits = 0.0, bits;
@@ -84,13 +97,15 @@ int main(int argc, char* argv[]) {
         tries++;
         if (predicted == originalText[i]) {
             hits++;
+            symbolStats[predicted][0]++;
         } else {
             copyModel = copyModel && hits + threshold < tries;
+            symbolStats[predicted][1]++;
         }
-        std::cout << "Hits: " << hits << " Tries: " << tries << std::endl;
+        //std::cout << "Hits: " << hits << " Tries: " << tries << std::endl;
 
         hitRate = (hits + alpha) / (tries + 2 * alpha);
-        std::cout << "Hit rate: " << hitRate << std::endl;
+        //std::cout << "Hit rate: " << hitRate << std::endl;
 
         symbolProb[predicted] = (hits + alpha) / (tries + 2 * alpha);
         comp_prob = (1 - symbolProb[predicted]) / 3;
@@ -102,6 +117,31 @@ int main(int argc, char* argv[]) {
         std::cout << predictedText[i];
     }
     std::cout << std::endl;
+
+        for (const auto& pair : symbolStats) {
+        std::cout << "Key: " << pair.first << ", Values: ";
+        for (const auto& value : pair.second) {
+            std::cout << value << " ";
+        }
+        std::cout << std::endl;
+    }
+
+
+    double prob;
+    int nHits;
+    int nMisses;
+    for(const auto& pair : symbolStats) {
+        std::cout << "Probability of Char " << pair.first << " " << std::endl;
+        nHits = pair.second[0];
+        nMisses = pair.second[1];
+        if (nHits == 0) {
+            prob = static_cast<double>(nHits + alpha) / (nHits + nMisses + 2 * alpha);
+        }
+        else {
+            prob = static_cast<double>(nHits) / nMisses;
+        }
+        std::cout << "Prob: " << prob << std::endl;
+    }
 
     return 0;
 }
