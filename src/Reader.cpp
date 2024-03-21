@@ -7,39 +7,50 @@
 Reader::Reader(const std::string& filePath) : filePath(filePath) {}
 
 void Reader::readFile() {
-    std::ifstream file(filePath, std::ios::binary); // Open the file in binary mode
+    std::ifstream file(filePath, std::ios::binary); 
 
-    if (!file.is_open()) {
+    if (!file) {
         std::cerr << "Could not open the file - '" << filePath << "'" << std::endl;
         return;
     }
 
-    fileContent.clear(); // Clear previous content
+    fileContent.clear(); 
+    kStringsPositions.clear();
     frequencies.clear(); // Reset frequencies
-    totalLetters = 0;    // Reset letter count
-    char byte;
-    
-    while (file.get(byte)) { // Read byte by byte
-        if (isalpha(static_cast<unsigned char>(byte))) { // Check if the byte is a letter
-            char lowerByte = tolower(static_cast<unsigned char>(byte));
-            fileContent += lowerByte; // Store the lowercase letter in fileContent
-            frequencies[lowerByte]++;
-            totalLetters++;
+    fileSize = 0;
+    alphabetSize = 0;
+    alphabet.clear();
+
+    char ch;
+    while (file.get(ch)) { 
+        if (isalpha(static_cast<unsigned char>(ch))) 
+        { 
+            char lowerCh = tolower(static_cast<unsigned char>(ch));
+            fileContent += lowerCh; 
+            fileSize++;
+            if (std::find(alphabet.begin(), alphabet.end(), lowerCh) == alphabet.end())
+            {
+                alphabet.push_back(lowerCh);
+                alphabetSize++;
+            }            
         }
     }
+    std::cout << "Alphabet: " << getAlphabetSize() << std::endl;
+    std::cout << "Size: " << getAlphabetSize() << std::endl; 
+
     file.close();
 }
 
 std::vector<std::pair<char, double>> Reader::computeFrequencies() {
     std::vector<std::pair<char, double>> relativeFrequencies;
     
-    if (totalLetters == 0) {
+    if (fileSize == 0) {
         std::cout << "No letters found or file not read." << std::endl;
         return relativeFrequencies;
     }
 
     for (const auto& entry : frequencies) {
-        double relativeFrequency = static_cast<double>(entry.second) / totalLetters;
+        double relativeFrequency = static_cast<double>(entry.second) / fileSize;
         relativeFrequencies.emplace_back(entry.first, relativeFrequency);
     }
     
@@ -56,40 +67,30 @@ std::vector<std::pair<char, double>> Reader::computeFrequencies() {
 }
 
 std::string Reader::getContent() {
-    return fileContent;
+    return this->fileContent;
 }
 
-char Reader::getRandomSymbol() {
-    if (cumulativeFrequencies.empty() && !frequencies.empty()) {
-        double sum = 0;
-        for (const auto& entry : frequencies) {
-            sum += static_cast<double>(entry.second) / totalLetters;
-            cumulativeFrequencies.emplace_back(entry.first, sum);
-        }
+std::unordered_map<std::string, std::vector<int>> Reader::getKStringsPositions(int kStringSize) {
+    if (fileContent.empty()) {
+        std::cerr << "No content found or file not read." << std::endl;
     }
 
-    // Early exit if no frequencies
-    if (cumulativeFrequencies.empty()) {
-        std::cerr << "No data to select from." << std::endl;
-        return '\0'; // Indicate failure/no selection
+    for (int i = 0; i < fileSize - kStringSize + 1; ++i) {
+        std::string kString = fileContent.substr(i, kStringSize);
+        kStringsPositions[kString].push_back(i);
     }
 
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_real_distribution<> dis(0, 1);
-
-    double randomValue = dis(gen);
-
-    for (const auto& entry : cumulativeFrequencies) {
-        if (randomValue <= entry.second) {
-            return entry.first;
-        }
-    }
-
-    // Fallback, should not normally reach here
-    return cumulativeFrequencies.back().first;
+    return this->kStringsPositions;
 }
 
-int Reader::getTotalLetters() {
-    return totalLetters;
+int Reader::getAlphabetSize() {
+    return this->alphabetSize;
+}
+
+std::vector<char> Reader::getAlphabet() {
+    return this->alphabet;
+}
+
+int Reader::getFileSize() {
+    return this->fileSize;
 }

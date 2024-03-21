@@ -17,7 +17,7 @@ int main(int argc, char* argv[]) {
 
     // Parse command line arguments
     int opt;
-    while((opt = getopt(argc, argv, "fkta")) != -1) {
+    while((opt = getopt(argc, argv, "f:k:t:a:")) != -1) {
         switch (opt)
         {
         case 'f':
@@ -43,11 +43,11 @@ int main(int argc, char* argv[]) {
     reader.readFile();
     std::vector<std::pair<char, double>> frequencies = reader.computeFrequencies();
     std::string originalText = reader.getContent();
-    int fileSize = reader.getTotalLetters();
+    int fileSize = reader.getFileSize();
 
     std::vector<char> predictedText;
     std::string currentKString = "";
-    std::unordered_map<std::string, std::list<int>> kStringPositions;
+    std::unordered_map<std::string, std::vector<int>> kStringPositions = reader.getKStringsPositions(k);
     std::unordered_map<char, double> symbolProb;
     std::unordered_map<char, std::array<int, 2>> symbolStats;
 
@@ -60,9 +60,6 @@ int main(int argc, char* argv[]) {
         symbolStats[keys[i]] = {0,0};  // Assign value (i squared) to the key i
     }
 
-
-
-    
     int hits = 0, tries = 0;
     double totalBits = 0.0, bits;
     int pointer = 0; 
@@ -74,12 +71,12 @@ int main(int argc, char* argv[]) {
 
     for (int i = 0; i < fileSize; i++) {
         if (i < k) {
-            predicted = reader.getRandomSymbol();
+            // predicted = reader.getRandomSymbol();
 
         } else {
             if (copyModel && kStringPositions.find(currentKString) == kStringPositions.end()) { 
                 kStringPositions[currentKString] = {i};
-                predicted = reader.getRandomSymbol(); 
+                // predicted = reader.getRandomSymbol(); 
             } else if (copyModel) {
                 pointer = kStringPositions[currentKString].front();
                 predicted = predictedText[pointer + 1];
