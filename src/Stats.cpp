@@ -6,7 +6,7 @@
  * @brief Constructs a Stats object.
  */
 
-Stats::Stats(double a) : alpha(alpha)
+Stats::Stats(double a) : alpha(a)
 {
     this->numberOfHits = 0;
     this->numberOfMisses = 0;

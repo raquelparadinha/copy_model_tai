@@ -7,6 +7,7 @@
 #include <numeric> 
 #include <unistd.h>
 #include "Reader.h"
+#include "CopyModel.h"
 
 
 int main(int argc, char* argv[]) {
@@ -43,16 +44,14 @@ int main(int argc, char* argv[]) {
     reader.readFile();
     std::vector<std::pair<char, double>> frequencies = reader.computeFrequencies();
     std::string originalText = reader.getContent();
-    int fileSize = reader.getFileSize();
+    // int fileSize = reader.getFileSize();
 
-    std::vector<char> predictedText;
-    std::string currentKString = "";
     std::unordered_map<std::string, std::vector<int>> kStringPositions = reader.getKStringsPositions(k);
-    std::unordered_map<char, double> symbolProb;
-    std::unordered_map<char, std::array<int, 2>> symbolStats;
+    // std::unordered_map<char, double> symbolProb;
+    // std::unordered_map<char, std::array<int, 2>> symbolStats;
 
-    std::vector<char> keys;
+    // std::vector<char> keys;
     
-
-    
+    CopyModel copyModel(k, threshold, alpha, originalText, kStringPositions, frequencies.size());
+    // copyModel.run();
 }

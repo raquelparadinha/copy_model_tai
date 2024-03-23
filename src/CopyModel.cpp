@@ -1,7 +1,7 @@
 #include "CopyModel.h"
 #include "Reader.h"
-#include <algorithm>
 #include "Stats.h"
+#include <algorithm>
 #include <cmath>
 #include <map>
 
@@ -37,7 +37,7 @@ CopyModel::CopyModel(int k, double t, int a, std::string oT, std::unordered_map<
 void CopyModel::run()
 {
     std::string match = findCopyModel();
-    while (globalPointer < originalText.size()) // break when file ends
+    while (globalPointer < (int)originalText.size()) // break when file ends
     {
         if (match != "")
         {

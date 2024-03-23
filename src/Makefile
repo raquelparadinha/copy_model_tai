@@ -8,7 +8,7 @@ CXXFLAGS=-Wall -std=c++17
 TARGET=cpm
 
 # Define object files
-OBJS=Reader.o cpm.o
+OBJS=Reader.o CopyModel.o Stats.o cpm.o
 
 # First rule is the one executed when no parameters are fed to the Makefile
 all: $(TARGET)
@@ -20,6 +20,12 @@ $(TARGET): $(OBJS)
 # Rule for compiling Reader.cpp to Reader.o
 Reader.o: Reader.cpp Reader.h
 	$(CXX) $(CXXFLAGS) -c Reader.cpp
+
+CopyModel.o: CopyModel.cpp CopyModel.h
+	$(CXX) $(CXXFLAGS) -c CopyModel.cpp
+
+Stats.o: Stats.cpp Stats.h
+	$(CXX) $(CXXFLAGS) -c Stats.cpp
 
 # Rule for compiling cpm.cpp to cpm.o
 cpm.o: cpm.cpp Reader.h
