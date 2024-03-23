@@ -11,7 +11,7 @@
 
 
 int main(int argc, char* argv[]) {
-    std::string filename = "../example/test.txt";
+    std::string filename = "../example/chry.txt";
     int k = 5;
     int threshold = 3; 
     int alpha = 1;
@@ -37,8 +37,9 @@ int main(int argc, char* argv[]) {
             std::cerr << "Usage: " << argv[0] << " -f <string> -k <int> -t <int> -a <int>" << std::endl;
             break;
         }
-
     }
+
+    std::cout << "Reading file... " << std::endl;
 
     Reader reader(filename);
     reader.readFile();
@@ -52,6 +53,7 @@ int main(int argc, char* argv[]) {
 
     // std::vector<char> keys;
     
+    std::cout << "Running CopyModel... " << std::endl;
     CopyModel copyModel(k, threshold, alpha, originalText, kStringPositions, frequencies.size());
-    // copyModel.run();
+    copyModel.run();
 }
