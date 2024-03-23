@@ -8,17 +8,22 @@ private:
     int k;
     double threshold;
     int alpha;
-    int alphabet_size;
-    Reader reader;
+    int globalPointer;
+    int localPointer;
     std::vector<std::string> pastKStrings;
     std::string predictedText;
+    std::string currentKString;
 
-
-
-
+    std::string originalText;
+    std::unordered_map<std::string, std::vector<int>> kStringsPositions;
+    int alphabetSize;
 
 public:
-    CopyModel(int k, double threshold, int alpha, int alphabet_size, std::string file);
+    CopyModel(int k, double threshold, int alpha, std::string originalText, std::unordered_map<std::string, std::vector<int>> kStringsPositions, int alphabetSize);
+
+    std::string findCopyModel();
+
+    void incrementGlobalPointer();
 
     void runCopyModel();
 
