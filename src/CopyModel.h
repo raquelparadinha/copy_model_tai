@@ -10,6 +10,7 @@ private:
     int alpha;
     int globalPointer;
     int copyPointer;
+    int fallbackWindowSize;
     std::vector<std::string> pastKStrings;
     std::string predictedText;
     std::string currentKString;
@@ -21,14 +22,14 @@ private:
     double totalNumberOfBits;
 
 public:
-    CopyModel(int k, double threshold, int alpha, std::string originalText, std::unordered_map<std::string, std::vector<int>> kStringsPositions, int alphabetSize);
+    CopyModel(int k, double threshold, int alpha, std::string originalText, std::unordered_map<std::string, std::vector<int>> kStringsPositions, int alphabetSize, int fallbackWindowSize);
 
     void run();
     void copyModel();
     void incrementGlobalPointer();
     std::string findCopyModel();
 
-    void fallbackModel();
+    void fallbackModel();   
 };
 
 #endif

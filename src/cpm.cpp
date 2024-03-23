@@ -15,6 +15,7 @@ int main(int argc, char* argv[]) {
     int k = 5;
     int threshold = 3; 
     int alpha = 1;
+    int fallbackWindowSize = 200;
 
     // Parse command line arguments
     int opt;

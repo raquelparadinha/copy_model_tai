@@ -15,7 +15,8 @@
  * @param kStringsPos The value of kStringsPositions.
  * @param size The value of alphabetSize.
  */
-CopyModel::CopyModel(int k, double t, int a, std::string oT, std::unordered_map<std::string, std::vector<int>> kStringsPos, int size) : k(k), threshold(t), alpha(a), originalText(oT), kStringsPositions(kStringsPos), alphabetSize(size)
+CopyModel::CopyModel(int k, double t, int a, std::string oT, std::unordered_map<std::string, std::vector<int>> kStringsPos, int size, int window) : 
+    k(k), threshold(t), alpha(a), originalText(oT), kStringsPositions(kStringsPos), alphabetSize(size), fallbackWindowSize(window)
 {
     this->pastKStrings = std::vector<std::string>();
 
@@ -86,13 +87,13 @@ void CopyModel::copyModel()
         if (originalText[copyPointer] == originalText[globalPointer])
         {
             stats.incrementHits();
-            this->totalNumberOfBits -= std::log2(prediction);
+            this->totalNumberOfBits += -std::log2(prediction);
         }
         else
         {
             stats.incrementMisses();
             double comp_prediction = 1 - prediction;
-            this->totalNumberOfBits -= std::log2(comp_prediction / (alphabetSize - 1));
+            this->totalNumberOfBits += -std::log2(comp_prediction / (alphabetSize - 1));
         }
 
         incrementGlobalPointer();
@@ -126,12 +127,11 @@ std::string CopyModel::findCopyModel()
 
 void CopyModel::fallbackModel()
 {
-    int fallbackWindowSize = 200;
     if (globalPointer < fallbackWindowSize)
     {
         fallbackWindowSize = globalPointer;
     }
-    std::string fallbackString = originalText.substr(globalPointer - fallbackWindowSize, globalPointer);
+    std::string fallbackString = originalText.substr(globalPointer - fallbackWindowSize, fallbackWindowSize);
     currentKString = originalText.substr(globalPointer, k);
 
     std::map<char, int> charCounts;
