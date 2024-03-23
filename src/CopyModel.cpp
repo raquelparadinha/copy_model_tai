@@ -37,7 +37,7 @@ CopyModel::CopyModel(int k, double t, int a, std::string oT, std::unordered_map<
 void CopyModel::run()
 {
     std::string match = findCopyModel();
-    while (globalPointer < (int)originalText.size()) // break when file ends
+    while (globalPointer < (int)originalText.size() - k) // break when reaches the last kString
     {
         if (match != "")
         {
@@ -66,7 +66,7 @@ void CopyModel::run()
 void CopyModel::copyModel()
 {
 
-    // Iniializa as stats e o threshold
+    // Inicializa as stats e o threshold
     Stats stats(alpha);
 
     // Compara o simbolo da posição atual com o simbolo da posição do copy model anterior
@@ -76,13 +76,13 @@ void CopyModel::copyModel()
         if (originalText[copyPointer] == originalText[globalPointer])
         {
             stats.incrementHits();
-            this->totalNumberOfBits += std::log2(prediction);
+            this->totalNumberOfBits -= std::log2(prediction);
         }
         else
         {
             stats.incrementMisses();
             double comp_prediction = 1 - prediction;
-            this->totalNumberOfBits += std::log2(comp_prediction / (alphabetSize - 1));
+            this->totalNumberOfBits -= std::log2(comp_prediction / (alphabetSize - 1));
         }
 
         incrementGlobalPointer();
