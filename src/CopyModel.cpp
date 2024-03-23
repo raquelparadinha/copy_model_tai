@@ -36,18 +36,28 @@ CopyModel::CopyModel(int k, double t, int a, std::string oT, std::unordered_map<
  */
 void CopyModel::run()
 {
+    std::cout << "Finding first window...";
     std::string match = findCopyModel();
-    while (globalPointer < (int)originalText.size()) // break when file ends
+
+    std::cout << globalPointer << std::endl;
+    std::cout << originalText.size() << std::endl;
+    while (globalPointer < originalText.size()) // break when file ends
     {
         if (match != "")
         {
+            std::cout << "Copy modelling...";
             copyModel();
+            std::cout << " Done." << std::endl;
         }
         else
         {
+            std::cout << "Fallback mode...";
             fallbackModel();
+            std::cout << " Done." << std::endl;
         }
+        std::cout << "Finding next window...";
         match = findCopyModel();
+        std::cout << " Done." << std::endl;
     }
 
     std::cout << "Total number of bits: " << totalNumberOfBits << std::endl;
@@ -76,13 +86,13 @@ void CopyModel::copyModel()
         if (originalText[copyPointer] == originalText[globalPointer])
         {
             stats.incrementHits();
-            this->totalNumberOfBits += std::log2(prediction);
+            this->totalNumberOfBits += -std::log2(prediction);
         }
         else
         {
             stats.incrementMisses();
             double comp_prediction = 1 - prediction;
-            this->totalNumberOfBits += std::log2(comp_prediction / (alphabetSize - 1));
+            this->totalNumberOfBits += -std::log2(comp_prediction / (alphabetSize - 1));
         }
 
         incrementGlobalPointer();
@@ -101,22 +111,26 @@ void CopyModel::copyModel()
 std::string CopyModel::findCopyModel()
 {
     currentKString = originalText.substr(globalPointer, k);
-
     if (std::find(pastKStrings.begin(), pastKStrings.end(), currentKString) != pastKStrings.end())
     {
         // Found a matching window
         copyPointer = kStringsPositions[currentKString].front();
+        std::cout << " Found a model." << std::endl;
+
         return currentKString;
     }
 
-    std::cout << "No copy found." << std::endl;
-
+    std::cout << " No copy found." << std::endl;
     return "";
 }
 
 void CopyModel::fallbackModel()
 {
     int fallbackWindowSize = 200;
+    if (globalPointer < fallbackWindowSize)
+    {
+        fallbackWindowSize = globalPointer;
+    }
     std::string fallbackString = originalText.substr(globalPointer - fallbackWindowSize, globalPointer);
     currentKString = originalText.substr(globalPointer, k);
 
@@ -135,7 +149,7 @@ void CopyModel::fallbackModel()
     // currently counts the whole kstring, but might be better to only a part of it
     for (char c : currentKString)
     {
-        this->totalNumberOfBits += std::log2(charProbabilities[c]);
+        this->totalNumberOfBits += -std::log2(charProbabilities[c]);
         incrementGlobalPointer();
     }
     // exit fallback model and look for match again
