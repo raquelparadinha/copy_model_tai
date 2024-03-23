@@ -25,7 +25,7 @@ public:
 
     void incrementGlobalPointer();
 
-    void runCopyModel();
+    void runCopyModel(int previousPointer);
 
     
 

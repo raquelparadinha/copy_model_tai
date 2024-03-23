@@ -113,32 +113,6 @@ int main(int argc, char* argv[]) {
     for (int i = 0; i < predictedText.size(); i++) {
         std::cout << predictedText[i];
     }
-    std::cout << std::endl;
-
-        for (const auto& pair : symbolStats) {
-        std::cout << "Key: " << pair.first << ", Values: ";
-        for (const auto& value : pair.second) {
-            std::cout << value << " ";
-        }
-        std::cout << std::endl;
-    }
-
-
-    double prob;
-    int nHits;
-    int nMisses;
-    for(const auto& pair : symbolStats) {
-        std::cout << "Probability of Char " << pair.first << " " << std::endl;
-        nHits = pair.second[0];
-        nMisses = pair.second[1];
-        if (nHits == 0) {
-            prob = static_cast<double>(nHits + alpha) / (nHits + nMisses + 2 * alpha);
-        }
-        else {
-            prob = static_cast<double>(nHits) / nMisses;
-        }
-        std::cout << "Prob: " << prob << std::endl;
-    }
 
     return 0;
 }

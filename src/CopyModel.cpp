@@ -1,6 +1,7 @@
 #include "CopyModel.h"
 #include "Reader.h"
 #include <algorithm>
+#include "Stats.h"
 
 /**
  * @brief Constructs a CopyModel object.
@@ -54,9 +55,37 @@ std::string CopyModel::findCopyModel() {
 
     return "";
 }
+/**
+ * Runs the copy model.
+ *
+ * Checks the next symbols and compares them to the ones found previously. Stops when probability falls below threshold
+ * 
+ */
 
-void runCopyModel() {
+void CopyModel::runCopyModel(int previousPointer) {
+
+    //Iniializa as stats e o threshold
+    Stats stats;
+    double threshold = 0.2;
+
+    //Compara o simbolo da posição atual com o simbolo da posição do copy model anterior
+    while (stats.getProbability() < threshold)
+    {
+        if (originalText[previousPointer] == originalText[globalPointer]) {
+            stats.incrementHits();
+        }
+        else {
+            stats.incrementMisses();
+        }
+
+        incrementGlobalPointer();
+        previousPointer++;
+
+        //Falta calcular a informação necessária para codificar os símbolos    
     
+    }
+
+    //Exit loop meaning the copy model is over
 
 }
 
