@@ -6,30 +6,33 @@
  * @brief Constructs a Stats object.
  */
 
-Stats::Stats() {
+Stats::Stats(double a) : alpha(alpha)
+{
     this->numberOfHits = 0;
     this->numberOfMisses = 0;
 }
 
-void Stats::incrementHits() {
+void Stats::incrementHits()
+{
     numberOfHits++;
 }
 
-void Stats::incrementMisses() {
+void Stats::incrementMisses()
+{
     numberOfMisses++;
 }
 
-int Stats::getNumberOfHits() const {
+int Stats::getNumberOfHits() const
+{
     return numberOfHits;
 }
 
-int Stats::getNumberOfMisses() const {
+int Stats::getNumberOfMisses() const
+{
     return numberOfMisses;
 }
 
-double Stats::getProbability() {
-    //alpha is 1 here
-    return (double) (numberOfHits + 1) / (numberOfHits + numberOfMisses + 2*1);
+double Stats::getProbability()
+{
+    return (double)(numberOfHits + alpha) / (numberOfHits + numberOfMisses + 2 * alpha);
 }
-
-

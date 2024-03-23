@@ -9,7 +9,7 @@ private:
     double threshold;
     int alpha;
     int globalPointer;
-    int localPointer;
+    int copyPointer;
     std::vector<std::string> pastKStrings;
     std::string predictedText;
     std::string currentKString;
@@ -18,17 +18,17 @@ private:
     std::unordered_map<std::string, std::vector<int>> kStringsPositions;
     int alphabetSize;
 
+    double totalNumberOfBits;
+
 public:
     CopyModel(int k, double threshold, int alpha, std::string originalText, std::unordered_map<std::string, std::vector<int>> kStringsPositions, int alphabetSize);
 
+    void run();
+    void copyModel();
+    void incrementGlobalPointer();
     std::string findCopyModel();
 
-    void incrementGlobalPointer();
-
-    void runCopyModel(int previousPointer);
-
-    
-
+    void fallbackModel();
 };
 
 #endif

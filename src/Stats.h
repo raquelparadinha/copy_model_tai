@@ -5,9 +5,10 @@ class Stats {
 private:
     int numberOfHits;
     int numberOfMisses;
+    double alpha;
 
 public:
-    Stats();
+    Stats(double alpha);
 
     void incrementHits();
     void incrementMisses();

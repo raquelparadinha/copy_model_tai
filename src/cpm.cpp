@@ -52,67 +52,7 @@ int main(int argc, char* argv[]) {
     std::unordered_map<char, std::array<int, 2>> symbolStats;
 
     std::vector<char> keys;
-    for (const auto& pair : frequencies) {
-        keys.push_back(pair.first);
-    }
+    
 
-    for (int i = 0; i < keys.size(); ++i) {
-        symbolStats[keys[i]] = {0,0};  // Assign value (i squared) to the key i
-    }
-
-    int hits = 0, tries = 0;
-    double totalBits = 0.0, bits;
-    int pointer = 0; 
-    bool copyModel = true;
-    double hitRate;
-    double comp_prob;
-
-    char predicted;
-
-    for (int i = 0; i < fileSize; i++) {
-        if (i < k) {
-            // predicted = reader.getRandomSymbol();
-
-        } else {
-            if (copyModel && kStringPositions.find(currentKString) == kStringPositions.end()) { 
-                kStringPositions[currentKString] = {i};
-                // predicted = reader.getRandomSymbol(); 
-            } else if (copyModel) {
-                pointer = kStringPositions[currentKString].front();
-                predicted = predictedText[pointer + 1];
-                kStringPositions[currentKString].push_back(i);
-            } else { 
-                predicted = predictedText[++pointer];
-                kStringPositions[currentKString].push_back(i);
-            }
-            currentKString.erase(0, 1);
-        }
-        currentKString += predicted;
-        std::cout << "K String: " << currentKString << std::endl;
-        predictedText.push_back(predicted);
-
-        tries++;
-        if (predicted == originalText[i]) {
-            hits++;
-            symbolStats[predicted][0]++;
-        } else {
-            copyModel = copyModel && hits + threshold < tries;
-            symbolStats[predicted][1]++;
-        }
-        //std::cout << "Hits: " << hits << " Tries: " << tries << std::endl;
-
-        hitRate = (hits + alpha) / (tries + 2 * alpha);
-        //std::cout << "Hit rate: " << hitRate << std::endl;
-
-        symbolProb[predicted] = (hits + alpha) / (tries + 2 * alpha);
-        comp_prob = (1 - symbolProb[predicted]) / 3;
-        bits = -log2(symbolProb[predicted]);
-        totalBits += bits;
-    }
-    std::cout << "Predicted text: " << std::endl;
-    for (int i = 0; i < predictedText.size(); i++) {
-        std::cout << predictedText[i];
-    }
-
-    return 0;
+    
 }
