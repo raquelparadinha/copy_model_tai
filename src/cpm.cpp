@@ -11,11 +11,11 @@
 
 
 int main(int argc, char* argv[]) {
-    std::string filename = "../example/test.txt";
+    std::string filename = "../example/chry.txt";
     int k = 3;
     double threshold = 0.7;
     int alpha = 1;
-    int fallbackWindowSize = 10;
+    int fallbackWindowSize = 200;
 
     // Parse command line arguments
     int opt;
