@@ -40,22 +40,15 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    std::cout << "Reading file... " << std::endl;
 
+    std::cout << std::endl << "Reading file... " << std::endl;
     Reader reader(filename);
-    reader.readFile();
-    // std::vector<std::pair<char, double>> frequencies = reader.computeFrequencies();
     std::string originalText = reader.getContent();
-    // int fileSize = reader.getFileSize();
-
     std::unordered_map<std::string, std::vector<int>> kStringPositions = reader.getKStringsPositions(k);
-    // std::unordered_map<char, double> symbolProb;
-    // std::unordered_map<char, std::array<int, 2>> symbolStats;
+    std::vector<char> alphabet = reader.getAlphabet();
 
-    // std::vector<char> keys;
-    
-    std::cout << "Running CopyModel... " << std::endl;
-    CopyModel copyModel(k, threshold, alpha, originalText, kStringPositions, reader.getAlphabet(), fallbackWindowSize);
+    std::cout << std::endl << "Running CopyModel... " << std::endl;
+    CopyModel copyModel(originalText, alphabet, kStringPositions, k, threshold, alpha, fallbackWindowSize);
     copyModel.run();
 
     return 0;

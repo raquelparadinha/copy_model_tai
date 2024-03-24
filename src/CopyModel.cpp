@@ -15,7 +15,7 @@
  * @param kStringsPos The value of kStringsPositions.
  * @param alphabet The alphabet of the text.
  */
-CopyModel::CopyModel(int k, double t, int a, std::string oT, std::unordered_map<std::string, std::vector<int>> kStringsPos, std::vector<char> alphabet, int window) : k(k), threshold(t), alpha(a), originalText(oT), kStringsPositions(kStringsPos), alphabet(alphabet), fallbackWindowSize(window)
+CopyModel::CopyModel(std::string oT, std::vector<char> alphabet, std::unordered_map<std::string, std::vector<int>> kStringsPos, int k, double t, int a, int window) : originalText(oT), alphabet(alphabet), kStringsPositions(kStringsPos), k(k), threshold(t), alpha(a), fallbackWindowSize(window)
 {
     this->pastKStrings = std::vector<std::string>();
     this->alphabetSize = alphabet.size();
@@ -38,6 +38,11 @@ CopyModel::CopyModel(int k, double t, int a, std::string oT, std::unordered_map<
 void CopyModel::run()
 {
     std::cout << "Text size: " << originalText.size() << std::endl;
+    std::cout << "kString size: " << k << std::endl;
+    std::cout << "Threshold: " << threshold << std::endl;
+    std::cout << "Alpha: " << alpha << std::endl;
+    std::cout << "FallbackWindow size: " << fallbackWindowSize << std::endl;
+
     std::string match = findCopyModel();
 
     while (globalPointer < (int)originalText.size() - k) // break when reaches the last kString
@@ -53,13 +58,10 @@ void CopyModel::run()
         match = findCopyModel();
     }
 
-    std::cout << std::endl
-              << std::endl
-              << "--=[     ]=--" << std::endl;
+    std::cout << std::endl << "Done. Results:"<< std::endl;
     std::cout << "Total number of bits: " << (double)totalNumberOfBits << std::endl;
     std::cout << "Average number of bits per symbol: " << (double)(totalNumberOfBits / originalText.size()) << std::endl;
     std::cout << "Compression ratio: " << (double)originalText.size() / totalNumberOfBits << std::endl;
-    std::cout << "--=[     ]=--" << std::endl;
 }
 
 /**
@@ -125,10 +127,11 @@ void CopyModel::copyModel()
 void CopyModel::fallbackModel()
 {
     double prob;
+    int n = 1;
     if (globalPointer < fallbackWindowSize)
     {
         currentKString = originalText.substr(globalPointer, k);
-        for (char c : currentKString.substr(0, 1))
+        for (int i = 0; i < n; i++)
         {
             prob = 1 / (double)alphabetSize;
             this->totalNumberOfBits += -std::log2(prob);
@@ -158,7 +161,7 @@ void CopyModel::fallbackModel()
             charProbabilities[c] = (double)(charCounts[c] + alpha) / (double)(fallbackWindowSize + alphabetSize * alpha);
         }
 
-        for (char c : currentKString.substr(0, 1))
+        for (char c : currentKString.substr(0, n))
         {
             prob = charProbabilities[c];
             this->totalNumberOfBits += -std::log2(prob);

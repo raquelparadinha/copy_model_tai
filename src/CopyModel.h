@@ -6,33 +6,32 @@
 
 class CopyModel {
 private:
+    std::string originalText;
+    std::vector<char> alphabet;
+    std::unordered_map<std::string, std::vector<int>> kStringsPositions;
+
     int k;
     double threshold;
     int alpha;
+    int fallbackWindowSize;
+
     int globalPointer;
     int copyPointer;
+    int alphabetSize;
     std::vector<std::string> pastKStrings;
     std::string predictedText;
     std::string currentKString;
 
-    std::string originalText;
-    std::unordered_map<std::string, std::vector<int>> kStringsPositions;
-    int alphabetSize;
-    std::vector<char> alphabet;
-
-    int fallbackWindowSize;
-
     double totalNumberOfBits;
-
 public:
-    CopyModel(int k, double threshold, int alpha, std::string originalText, std::unordered_map<std::string, std::vector<int>> kStringsPositions, std::vector<char> alphabet, int fallbackWindowSize);
+    CopyModel(std::string originalText, std::vector<char> alphabet, std::unordered_map<std::string, std::vector<int>> kStringsPositions, int k, double threshold, int alpha, int fallbackWindowSize);
 
     void run();
-    void copyModel();
-    void incrementGlobalPointer();
-    std::string findCopyModel();
 
-    void fallbackModel();   
+    std::string findCopyModel();
+    void copyModel();
+    void fallbackModel();
+    void incrementGlobalPointer();
 };
 
 #endif

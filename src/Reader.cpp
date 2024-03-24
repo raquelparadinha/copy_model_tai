@@ -4,7 +4,9 @@
 #include <numeric>
 #include <random>
 
-Reader::Reader(const std::string& filePath) : filePath(filePath) {}
+Reader::Reader(const std::string& filePath) : filePath(filePath) {
+    readFile();
+}
 
 void Reader::readFile() {
     std::ifstream file(filePath, std::ios::binary); 
@@ -58,14 +60,14 @@ std::vector<std::pair<char, double>> Reader::computeFrequencies() {
         relativeFrequencies.emplace_back(entry.first, relativeFrequency);
     }
     
-    // Sort the vector by relative frequency in descending order
-    std::sort(relativeFrequencies.begin(), relativeFrequencies.end(), [](const auto& a, const auto& b) {
-        return a.second > b.second;
-    });
+    // // Sort the vector by relative frequency in descending order
+    // std::sort(relativeFrequencies.begin(), relativeFrequencies.end(), [](const auto& a, const auto& b) {
+    //     return a.second > b.second;
+    // });
     
-    for (const auto& [letter, freq] : relativeFrequencies) {
-        std::cout << "Letter: " << letter << ", Relative Frequency: " << freq << std::endl;
-    }
+    // for (const auto& [letter, freq] : relativeFrequencies) {
+    //     std::cout << "Letter: " << letter << ", Relative Frequency: " << freq << std::endl;
+    // }
     
     return relativeFrequencies;
 }
