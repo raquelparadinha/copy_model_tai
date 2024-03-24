@@ -18,13 +18,14 @@ private:
     std::string originalText;
     std::unordered_map<std::string, std::vector<int>> kStringsPositions;
     int alphabetSize;
+    std::vector<char> alphabet;
 
     int fallbackWindowSize;
 
     double totalNumberOfBits;
 
 public:
-    CopyModel(int k, double threshold, int alpha, std::string originalText, std::unordered_map<std::string, std::vector<int>> kStringsPositions, int alphabetSize, int fallbackWindowSize);
+    CopyModel(int k, double threshold, int alpha, std::string originalText, std::unordered_map<std::string, std::vector<int>> kStringsPositions, std::vector<char> alphabet, int fallbackWindowSize);
 
     void run();
     void copyModel();

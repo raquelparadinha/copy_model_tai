@@ -15,10 +15,11 @@
  * @param kStringsPos The value of kStringsPositions.
  * @param size The value of alphabetSize.
  */
-CopyModel::CopyModel(int k, double t, int a, std::string oT, std::unordered_map<std::string, std::vector<int>> kStringsPos, int alphabetSize, int window) : 
-    k(k), threshold(t), alpha(a), originalText(oT), kStringsPositions(kStringsPos), alphabetSize(alphabetSize), fallbackWindowSize(window)
+CopyModel::CopyModel(int k, double t, int a, std::string oT, std::unordered_map<std::string, std::vector<int>> kStringsPos, std::vector<char> alphabet, int window) : 
+    k(k), threshold(t), alpha(a), originalText(oT), kStringsPositions(kStringsPos), alphabet(alphabet), fallbackWindowSize(window)
 {
     this->pastKStrings = std::vector<std::string>();
+    this->alphabetSize = alphabet.size();
 
     this->globalPointer = 0;
     this->copyPointer = 0;
@@ -137,7 +138,6 @@ void CopyModel::fallbackModel()
     double prob;
     if (globalPointer < fallbackWindowSize)
     {
-        // fallbackWindowSize = globalPointer;
         currentKString = originalText.substr(globalPointer, k);
         for (char c : currentKString.substr(0, 1))
         {
@@ -155,14 +155,26 @@ void CopyModel::fallbackModel()
 
         std::map<char, int> charCounts;
         std::map<char, double> charProbabilities;
+        for (char c : alphabet)
+        {
+            charCounts[c] = 0;
+            charProbabilities[c] = 0;
+        }
 
+        std::cout << "Fallback string: " << fallbackString << std::endl;
         for (char c : fallbackString)
         {
             charCounts[c]++;
         }
         for (const auto &pair : charCounts)
         {
-            charProbabilities[pair.first] = (double)pair.second / (double)fallbackWindowSize;
+            std::cout << "Char: " << pair.first << ", Count: " << pair.second << std::endl;
+            charProbabilities[pair.first] = (double)(pair.second + alpha) / (double)(fallbackWindowSize + alphabetSize * alpha);
+        }
+
+        for (const auto &pair : charProbabilities)
+        {
+            std::cout << "Char: " << pair.first << ", Probability: " << pair.second << std::endl;
         }
 
         for (char c : currentKString.substr(0, 1))

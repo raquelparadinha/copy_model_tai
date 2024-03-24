@@ -15,7 +15,7 @@ int main(int argc, char* argv[]) {
     int k = 3;
     double threshold = 0.7;
     int alpha = 1;
-    int fallbackWindowSize = 2;
+    int fallbackWindowSize = 10;
 
     // Parse command line arguments
     int opt;
@@ -55,7 +55,7 @@ int main(int argc, char* argv[]) {
     // std::vector<char> keys;
     
     std::cout << "Running CopyModel... " << std::endl;
-    CopyModel copyModel(k, threshold, alpha, originalText, kStringPositions, reader.getAlphabetSize(), fallbackWindowSize);
+    CopyModel copyModel(k, threshold, alpha, originalText, kStringPositions, reader.getAlphabet(), fallbackWindowSize);
     copyModel.run();
 
     return 0;
