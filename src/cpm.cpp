@@ -11,11 +11,11 @@
 
 
 int main(int argc, char* argv[]) {
-    std::string filename = "../example/chry.txt";
-    int k = 5;
-    int threshold = 3; 
+    std::string filename = "../example/test.txt";
+    int k = 3;
+    double threshold = 0.4; 
     int alpha = 1;
-    int fallbackWindowSize = 200;
+    int fallbackWindowSize = 2;
 
     // Parse command line arguments
     int opt;
@@ -29,13 +29,13 @@ int main(int argc, char* argv[]) {
             k = atoi(optarg);
             break;
         case 't':
-            threshold = atoi(optarg);
+            threshold = atof(optarg);
             break;
         case 'a':
             alpha = atoi(optarg);
             break;
         default:
-            std::cerr << "Usage: " << argv[0] << " -f <string> -k <int> -t <int> -a <int>" << std::endl;
+            std::cerr << "Usage: " << argv[0] << " -f <string> -k <int> -t <double> -a <int>" << std::endl;
             break;
         }
     }
@@ -44,7 +44,7 @@ int main(int argc, char* argv[]) {
 
     Reader reader(filename);
     reader.readFile();
-    std::vector<std::pair<char, double>> frequencies = reader.computeFrequencies();
+    // std::vector<std::pair<char, double>> frequencies = reader.computeFrequencies();
     std::string originalText = reader.getContent();
     // int fileSize = reader.getFileSize();
 
@@ -55,6 +55,8 @@ int main(int argc, char* argv[]) {
     // std::vector<char> keys;
     
     std::cout << "Running CopyModel... " << std::endl;
-    CopyModel copyModel(k, threshold, alpha, originalText, kStringPositions, frequencies.size());
+    CopyModel copyModel(k, threshold, alpha, originalText, kStringPositions, reader.getAlphabetSize(), fallbackWindowSize);
     copyModel.run();
+
+    return 0;
 }

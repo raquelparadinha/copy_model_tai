@@ -35,7 +35,11 @@ void Reader::readFile() {
             }            
         }
     }
-    std::cout << "Alphabet: " << getAlphabetSize() << std::endl;
+    std::cout << "Alphabet: " << std::endl;
+    for (const auto& letter : alphabet) {
+        std::cout << letter << " ";
+    }
+    std::cout << std::endl;
     std::cout << "Size: " << getAlphabetSize() << std::endl; 
 
     file.close();

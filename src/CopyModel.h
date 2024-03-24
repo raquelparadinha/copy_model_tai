@@ -3,6 +3,7 @@
 
 #include "Reader.h"
 
+
 class CopyModel {
 private:
     int k;
@@ -10,7 +11,6 @@ private:
     int alpha;
     int globalPointer;
     int copyPointer;
-    int fallbackWindowSize;
     std::vector<std::string> pastKStrings;
     std::string predictedText;
     std::string currentKString;
@@ -18,6 +18,8 @@ private:
     std::string originalText;
     std::unordered_map<std::string, std::vector<int>> kStringsPositions;
     int alphabetSize;
+
+    int fallbackWindowSize;
 
     double totalNumberOfBits;
 
