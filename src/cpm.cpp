@@ -13,7 +13,7 @@
 int main(int argc, char* argv[]) {
     std::string filename = "../example/test.txt";
     int k = 3;
-    double threshold = 0.4; 
+    double threshold = 0.7;
     int alpha = 1;
     int fallbackWindowSize = 2;
 
