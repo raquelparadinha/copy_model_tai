@@ -61,7 +61,8 @@ void CopyModel::run()
     std::cout << std::endl << "Done. Results:"<< std::endl;
     std::cout << "Total number of bits: " << (double)totalNumberOfBits << std::endl;
     std::cout << "Average number of bits per symbol: " << (double)(totalNumberOfBits / originalText.size()) << std::endl;
-    std::cout << "Compression ratio: " << (double)originalText.size() / totalNumberOfBits << std::endl;
+    std::cout << "Compression ratio: " << ((double)originalText.size() * 8) / totalNumberOfBits << std::endl;
+    std::cout << "Compression percentage: " << (1 - (totalNumberOfBits / (originalText.size() * 8))) * 100 << "%" << std::endl;
 }
 
 /**
