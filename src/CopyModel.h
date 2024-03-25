@@ -8,23 +8,23 @@ class CopyModel {
 private:
     std::string originalText;
     std::vector<char> alphabet;
-    std::unordered_map<std::string, std::vector<int>> kStringsPositions;
 
     int k;
     double threshold;
-    int alpha;
+    double alpha;
     int fallbackWindowSize;
 
     int globalPointer;
     int copyPointer;
     int alphabetSize;
-    std::vector<std::string> pastKStrings;
+    std::unordered_map<std::string, std::vector<int>> pastKStrings;
+
     std::string predictedText;
     std::string currentKString;
 
     double totalNumberOfBits;
 public:
-    CopyModel(std::string originalText, std::vector<char> alphabet, std::unordered_map<std::string, std::vector<int>> kStringsPositions, int k, double threshold, int alpha, int fallbackWindowSize);
+    CopyModel(std::string originalText, std::vector<char> alphabet, int k, double threshold, double alpha, int fallbackWindowSize);
 
     void run();
 

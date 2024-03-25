@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <cmath>
 #include <map>
+#include <chrono>
 
 /**
  * @brief Constructs a CopyModel object.
@@ -15,16 +16,15 @@
  * @param kStringsPos The value of kStringsPositions.
  * @param alphabet The alphabet of the text.
  */
-CopyModel::CopyModel(std::string oT, std::vector<char> alphabet, std::unordered_map<std::string, std::vector<int>> kStringsPos, int k, double t, int a, int window) : originalText(oT), alphabet(alphabet), kStringsPositions(kStringsPos), k(k), threshold(t), alpha(a), fallbackWindowSize(window)
+CopyModel::CopyModel(std::string oT, std::vector<char> alphabet, int k, double t, double a, int window) : originalText(oT), alphabet(alphabet), k(k), threshold(t), alpha(a), fallbackWindowSize(window)
 {
-    this->pastKStrings = std::vector<std::string>();
+    this->pastKStrings = {};
     this->alphabetSize = alphabet.size();
 
     this->globalPointer = 0;
     this->copyPointer = 0;
 
     this->currentKString = "";
-    this->predictedText = "";
 
     this->totalNumberOfBits = 0;
 }
@@ -37,28 +37,29 @@ CopyModel::CopyModel(std::string oT, std::vector<char> alphabet, std::unordered_
  */
 void CopyModel::run()
 {
-    std::cout << "Text size: " << originalText.size() << std::endl;
-    std::cout << "kString size: " << k << std::endl;
-    std::cout << "Threshold: " << threshold << std::endl;
-    std::cout << "Alpha: " << alpha << std::endl;
-    std::cout << "FallbackWindow size: " << fallbackWindowSize << std::endl;
+    std::string match;
 
-    std::string match = findCopyModel();
-
-    while (globalPointer < (int)originalText.size() - k) // break when reaches the last kString
+    auto start = std::chrono::high_resolution_clock::now();
+    while (globalPointer < (int)originalText.size()) // break when reaches the last kString
     {
+        match = findCopyModel();
+        
         if (match != "")
         {
+            std::cout << "Copy model" << std::endl;
             copyModel();
         }
         else
         {
+            std::cout << "Fallback model" << std::endl;
             fallbackModel();
         }
-        match = findCopyModel();
     }
+    auto end = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
 
     std::cout << std::endl << "Done. Results:"<< std::endl;
+    std::cout << "Execution time: " << duration.count() << " milliseconds" << std::endl;
     std::cout << "Total number of bits: " << (double)totalNumberOfBits << std::endl;
     std::cout << "Average number of bits per symbol: " << (double)(totalNumberOfBits / originalText.size()) << std::endl;
     std::cout << "Compression ratio: " << ((double)originalText.size() * 8) / totalNumberOfBits << std::endl;
@@ -74,13 +75,15 @@ void CopyModel::run()
  */
 std::string CopyModel::findCopyModel()
 {
-    currentKString = originalText.substr(globalPointer, k);
-    if (std::find(pastKStrings.begin(), pastKStrings.end(), currentKString) != pastKStrings.end())
+    if (globalPointer >= k)
     {
-        // Found a matching window
-        copyPointer = kStringsPositions[currentKString].front();
+        if (pastKStrings.find(currentKString) != pastKStrings.end())
+        {
+            // Found a matching window for the past k characters
+            copyPointer = pastKStrings[currentKString].front();
 
-        return currentKString;
+            return currentKString;
+        }
     }
 
     return "";
@@ -101,7 +104,7 @@ void CopyModel::copyModel()
 
     // Compara o simbolo da posição atual com o simbolo da posição do copy model anterior
     double prediction = stats.getProbability();
-    while (prediction < threshold)
+    while (prediction > threshold || globalPointer < (int)originalText.size())
     {
         if (originalText[copyPointer] == originalText[globalPointer])
         {
@@ -115,8 +118,6 @@ void CopyModel::copyModel()
             this->totalNumberOfBits += -std::log2(comp_prediction / (alphabetSize - 1));
         }
 
-        // std::cout << "Hits: " << stats.getNumberOfHits() << ", " << "Misses: " << stats.getNumberOfMisses() << std::endl;
-
         incrementGlobalPointer();
         copyPointer++;
 
@@ -128,10 +129,10 @@ void CopyModel::copyModel()
 void CopyModel::fallbackModel()
 {
     double prob;
-    int n = 1;
+    int n = 1; // chars of the kstring to count on this fallback model
+
     if (globalPointer < fallbackWindowSize)
     {
-        currentKString = originalText.substr(globalPointer, k);
         for (int i = 0; i < n; i++)
         {
             prob = 1 / (double)alphabetSize;
@@ -142,7 +143,6 @@ void CopyModel::fallbackModel()
     else
     {
         std::string fallbackString = originalText.substr(globalPointer - fallbackWindowSize, fallbackWindowSize);
-        currentKString = originalText.substr(globalPointer, k);
 
         std::map<char, int> charCounts;
         std::map<char, double> charProbabilities;
@@ -156,18 +156,6 @@ void CopyModel::fallbackModel()
         {
             charCounts[c]++;
         }
-
-        // for (char c : alphabet)
-        // {
-        //     charProbabilities[c] = (double)(charCounts[c] + alpha) / (double)(fallbackWindowSize + alphabetSize * alpha);
-        // }
-
-        // for (char c : currentKString.substr(0, n))
-        // {
-        //     prob = charProbabilities[c];
-        //     this->totalNumberOfBits += -std::log2(prob);
-        //     incrementGlobalPointer();
-        // }
 
         for (std::pair pair : charCounts) {
             charProbabilities[pair.first] = (double)pair.second / fallbackWindowSize;
@@ -183,7 +171,12 @@ void CopyModel::fallbackModel()
 
 void CopyModel::incrementGlobalPointer()
 {
+    if (globalPointer >= k - 1) {
+        currentKString = originalText.substr(globalPointer - k + 1, k);
+        pastKStrings[currentKString].push_back(globalPointer);
+    }
+    
     globalPointer++;
-    predictedText += originalText[globalPointer];
-    pastKStrings.push_back(currentKString);
+    
+    // std::cout << globalPointer << " " << originalText.size() << std::endl;   
 }

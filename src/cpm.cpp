@@ -13,13 +13,13 @@
 int main(int argc, char* argv[]) {
     std::string filename = "../example/chry.txt";
     int k = 3;
-    double threshold = 0.7;
-    int alpha = 1;
+    double threshold = 0.3;
+    double alpha = 1;
     int fallbackWindowSize = 200;
 
     // Parse command line arguments
     int opt;
-    while((opt = getopt(argc, argv, "f:k:t:a:")) != -1) {
+    while((opt = getopt(argc, argv, "f:k:t:a:w:")) != -1) {
         switch (opt)
         {
         case 'f':
@@ -32,10 +32,13 @@ int main(int argc, char* argv[]) {
             threshold = atof(optarg);
             break;
         case 'a':
-            alpha = atoi(optarg);
+            alpha = atof(optarg);
+            break;
+        case 'w':
+            fallbackWindowSize = atoi(optarg);
             break;
         default:
-            std::cerr << "Usage: " << argv[0] << " -f <string> -k <int> -t <double> -a <int>" << std::endl;
+            std::cerr << "Usage: " << argv[0] << " -f <string> -k <int> -t <double> -a <double> -w <int>" << std::endl;
             break;
         }
     }
@@ -44,12 +47,18 @@ int main(int argc, char* argv[]) {
     std::cout << std::endl << "Reading file... " << std::endl;
     Reader reader(filename);
     std::string originalText = reader.getContent();
-    std::unordered_map<std::string, std::vector<int>> kStringPositions = reader.getKStringsPositions(k);
     std::vector<char> alphabet = reader.getAlphabet();
 
+
+    std::cout << "Text size: " << originalText.size() << std::endl;
+    std::cout << "kString size: " << k << std::endl;
+    std::cout << "Threshold: " << threshold << std::endl;
+    std::cout << "Alpha: " << alpha << std::endl;
+    std::cout << "FallbackWindow size: " << fallbackWindowSize << std::endl;
     std::cout << std::endl << "Running CopyModel... " << std::endl;
-    CopyModel copyModel(originalText, alphabet, kStringPositions, k, threshold, alpha, fallbackWindowSize);
+    CopyModel copyModel(originalText, alphabet, k, threshold, alpha, fallbackWindowSize);
     copyModel.run();
+
 
     return 0;
 }
