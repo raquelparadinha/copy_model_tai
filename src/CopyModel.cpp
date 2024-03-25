@@ -157,17 +157,27 @@ void CopyModel::fallbackModel()
             charCounts[c]++;
         }
 
-        for (char c : alphabet)
-        {
-            charProbabilities[c] = (double)(charCounts[c] + alpha) / (double)(fallbackWindowSize + alphabetSize * alpha);
+        // for (char c : alphabet)
+        // {
+        //     charProbabilities[c] = (double)(charCounts[c] + alpha) / (double)(fallbackWindowSize + alphabetSize * alpha);
+        // }
+
+        // for (char c : currentKString.substr(0, n))
+        // {
+        //     prob = charProbabilities[c];
+        //     this->totalNumberOfBits += -std::log2(prob);
+        //     incrementGlobalPointer();
+        // }
+
+        for (std::pair pair : charCounts) {
+            charProbabilities[pair.first] = (double)pair.second / fallbackWindowSize;
+
+            prob += -(double)charProbabilities[pair.first] * (double)std::log2(charProbabilities[pair.first]);
         }
 
-        for (char c : currentKString.substr(0, n))
-        {
-            prob = charProbabilities[c];
-            this->totalNumberOfBits += -std::log2(prob);
-            incrementGlobalPointer();
-        }
+        this->totalNumberOfBits += prob;
+
+        incrementGlobalPointer();
     }
 }
 
