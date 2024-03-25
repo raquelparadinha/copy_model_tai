@@ -30,15 +30,12 @@ public:
 
     std::string getContent();
 
-    std::unordered_map<std::string, std::vector<int>> getKStringsPositions(int KStringSize);
-
     int getAlphabetSize();
 
     std::vector<char> getAlphabet();
 
     int getFileSize();
 
-    std::vector<std::pair<char, double>> computeFrequencies();
 
 };
 
