@@ -30,6 +30,8 @@ public:
 
     std::string findCopyModel();
     void copyModel();
+    void checkKString(int pointer, int local_pointer);
+    void startThread(int pointer, int local_pointer); 
     void fallbackModel();
     void incrementGlobalPointer();
 };
