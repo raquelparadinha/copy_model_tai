@@ -16,7 +16,6 @@ void Reader::readFile() {
     }
 
     fileContent.clear(); 
-    frequencies.clear(); // Reset frequencies
     alphabet.clear();
 
     char ch;
