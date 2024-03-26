@@ -9,6 +9,19 @@
 #include "Reader.h"
 #include "CopyModel.h"
 
+void printUsage() { 
+    std::cout << "\nUsage: ./cpm [options]\n"
+              << "\n"
+              << "Options:\n"
+              << "  -h            Show this help message and exit\n"
+              << "  -f <file>     Specify the file to process\n"
+              << "  -k <int>      Specify the size of the K Strings\n"
+              << "  -t <double>   Specify the threshold value\n"
+              << "  -a <double>   Specify the smothing paramenter (alpha) value\n"
+              << "  -w <int>      Specify the size of the fallback window\n"
+              << std::endl;
+}
+
 
 int main(int argc, char* argv[]) {
     std::string filename = "../example/chry.txt";
@@ -19,7 +32,7 @@ int main(int argc, char* argv[]) {
 
     // Parse command line arguments
     int opt;
-    while((opt = getopt(argc, argv, "f:k:t:a:w:")) != -1) {
+    while((opt = getopt(argc, argv, "f:k:t:a:w:h")) != -1) {
         switch (opt)
         {
         case 'f':
@@ -37,9 +50,15 @@ int main(int argc, char* argv[]) {
         case 'w':
             fallbackWindowSize = atoi(optarg);
             break;
+        case 'h':
+            printUsage();
+            return 0;
+        case '?':
+            printUsage();
+            return 1;
         default:
-            std::cerr << "Usage: " << argv[0] << " -f <string> -k <int> -t <double> -a <double> -w <int>" << std::endl;
-            break;
+            printUsage();
+            return 1;
         }
     }
 
@@ -62,3 +81,4 @@ int main(int argc, char* argv[]) {
 
     return 0;
 }
+
