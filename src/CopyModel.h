@@ -32,6 +32,7 @@ public:
     void copyModel();
     void fallbackModel();
     void incrementGlobalPointer();
+    int getStats();
 };
 
 #endif

@@ -46,12 +46,12 @@ void CopyModel::run()
         
         if (match != "")
         {
-            std::cout << "Copy model" << std::endl;
+            //std::cout << "Copy model" << std::endl;
             copyModel();
         }
         else
         {
-            std::cout << "Fallback model" << std::endl;
+            //std::cout << "Fallback model" << std::endl;
             fallbackModel();
         }
     }
@@ -59,7 +59,8 @@ void CopyModel::run()
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
 
     std::cout << std::endl << "Done. Results:"<< std::endl;
-    std::cout << "Execution time: " << duration.count() << " milliseconds" << std::endl;
+    std::cout << "Parameters: k=" << k << ", threshold=" << threshold << ", alpha=" << alpha << ", fallbackWindowSize=" << fallbackWindowSize << std::endl;
+    std::cout << "Execution time: " << duration.count() / 1000 << " seconds" << std::endl;
     std::cout << "Total number of bits: " << (double)totalNumberOfBits << std::endl;
     std::cout << "Average number of bits per symbol: " << (double)(totalNumberOfBits / originalText.size()) << std::endl;
     std::cout << "Compression ratio: " << ((double)originalText.size() * 8) / totalNumberOfBits << std::endl;
@@ -180,3 +181,9 @@ void CopyModel::incrementGlobalPointer()
     
     // std::cout << globalPointer << " " << originalText.size() << std::endl;   
 }
+
+int CopyModel::getStats()
+{
+    return totalNumberOfBits;
+    
+    }
