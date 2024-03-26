@@ -1,1 +1,34 @@
 [
+  {
+    "t": 0.1,
+    "totalNumberOfBits": 45139471
+  },
+  {
+    "t": 0.15,
+    "totalNumberOfBits": 45139471
+  },
+  {
+    "t": 0.2,
+    "totalNumberOfBits": 45139471
+  },
+  {
+    "t": 0.25,
+    "totalNumberOfBits": 45139471
+  },
+  {
+    "t": 0.3,
+    "totalNumberOfBits": 45218697
+  },
+  {
+    "t": 0.35,
+    "totalNumberOfBits": 47394030
+  },
+  {
+    "t": 0.4,
+    "totalNumberOfBits": 48512710
+  },
+  {
+    "t": 0.45,
+    "totalNumberOfBits": 49554446
+  }
+]

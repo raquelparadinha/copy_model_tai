@@ -1,0 +1,30 @@
+[
+  {
+    "a": 0.5,
+    "totalNumberOfBits": 45279122
+  },
+  {
+    "a": 0.75,
+    "totalNumberOfBits": 45263423
+  },
+  {
+    "a": 1,
+    "totalNumberOfBits": 45218697
+  },
+  {
+    "a": 1.25,
+    "totalNumberOfBits": 45214323
+  },
+  {
+    "a": 1.5,
+    "totalNumberOfBits": 45211718
+  },
+  {
+    "a": 1.75,
+    "totalNumberOfBits": 45207043
+  },
+  {
+    "a": 2,
+    "totalNumberOfBits": 45201520
+  }
+]
