@@ -11,7 +11,7 @@
 #include "Stats.h"
 
 void runAndSaveResultsForK(const std::string& originalText, const std::vector<char>& alphabet, double referenceThreshold, double referenceAlpha, int referenceFallbackWindowSize) {
-    std::ofstream outFile("results_k.json");
+    std::ofstream outFile("../output/results/results_k.json");
     outFile << "[" << std::endl; // Begin JSON array
     
     bool firstEntry = true;
@@ -42,7 +42,7 @@ void runAndSaveResultsForK(const std::string& originalText, const std::vector<ch
 }
 
 void runAndSaveResultsForT(const std::string& originalText, const std::vector<char>& alphabet, double referenceK, double referenceAlpha, int referenceFallbackWindowSize) {
-    std::ofstream outFile("results_t.json");
+    std::ofstream outFile("../output/results/results_t.json");
     outFile << "[" << std::endl; // Begin JSON array
     
     bool firstEntry = true;
@@ -72,7 +72,7 @@ void runAndSaveResultsForT(const std::string& originalText, const std::vector<ch
 }
 
 void runAndSaveResultsForA(const std::string& originalText, const std::vector<char>& alphabet, double referenceThreshold, double referencek, int referenceFallbackWindowSize) {
-    std::ofstream outFile("results_a.json");
+    std::ofstream outFile("../output/results/results_a.json");
     outFile << "[" << std::endl; // Begin JSON array
     
     bool firstEntry = true;
@@ -103,7 +103,7 @@ void runAndSaveResultsForA(const std::string& originalText, const std::vector<ch
 }
 
 void runAndSaveResultsForWS(const std::string& originalText, const std::vector<char>& alphabet, double referenceThreshold, double referenceAlpha, int referenceK) {
-    std::ofstream outFile("results_ws.json");
+    std::ofstream outFile("../output/results/results_ws.json");
     outFile << "[" << std::endl; // Begin JSON array
     
     bool firstEntry = true;
