@@ -1,11 +1,6 @@
-#include <fstream>
 #include <iostream>
-#include <vector>
-#include <cmath> 
-#include <algorithm> 
-#include <list>
-#include <numeric> 
 #include <unistd.h>
+
 #include "Reader.h"
 #include "CopyModel.h"
 
