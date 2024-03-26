@@ -5,6 +5,9 @@
 #include <cmath>
 #include <map>
 #include <chrono>
+#include <thread>
+#include <mutex>
+
 
 /**
  * @brief Constructs a CopyModel object.
@@ -28,6 +31,63 @@ CopyModel::CopyModel(std::string oT, std::vector<char> alphabet, int k, double t
 
     this->totalNumberOfBits = 0;
 }
+
+std::map<int, std::vector<double>> rankings = {};
+std::mutex mtx;
+std::vector<std::thread> threads;
+
+
+
+void insertIntoRanking(int pointer, std::vector<double> values) {
+    std::lock_guard<std::mutex> lock(mtx); // Lock the mutex to synchronize access to the global map
+    rankings[pointer] = values;
+    //std::cout << "Inserted" << std::endl;
+}
+
+void CopyModel::startThread(int pointer, int local_pointer) {
+    threads.push_back(std::thread([this, pointer, local_pointer]() {
+        checkKString(pointer, local_pointer);
+    }));
+}
+
+
+void CopyModel::checkKString(int pointer, int local_pointer) {
+
+    Stats stats(alpha);
+
+    int initial_pointer = pointer;
+
+    double i = 0.0;
+        double prediction = stats.getProbability();
+        double information = 0.0;
+        while (prediction > threshold && pointer < (int)originalText.size())
+        {
+            if (originalText[pointer] == originalText[local_pointer])
+            {
+                stats.incrementHits();
+                //this->totalNumberOfBits += -std::log2(prediction);
+                information += -std::log2(prediction);
+            }
+            else
+            {
+                stats.incrementMisses();
+                double comp_prediction = 1 - prediction;
+                //this->totalNumberOfBits += -std::log2(comp_prediction / (alphabetSize - 1));
+                information += -std::log2(comp_prediction / (alphabetSize - 1));
+
+            }
+
+            local_pointer++;
+            pointer++;
+
+            prediction = stats.getProbability();
+            i++;
+        }
+        //rankings[pointer] = {i,information};
+
+    insertIntoRanking(initial_pointer, {i,information});
+}
+
 
 /**
  * Runs the CopyModel.
@@ -103,12 +163,9 @@ void CopyModel::copyModel()
 
     // Compara o simbolo da posição atual com o simbolo da posição do copy model anterior
     std::vector<int> pointers = pastKStrings[currentKString];
-    std::map<int, std::vector<double>> rankings = {};
 
     int local_pointer = globalPointer;
-    for (int pointer : pointers) {
-        Stats stats(alpha);
-
+    /*for (int pointer : pointers) {
         double i = 0.0;
         double prediction = stats.getProbability();
         double information = 0.0;
@@ -137,6 +194,18 @@ void CopyModel::copyModel()
         }
         rankings[pointer] = {i,information};
     
+    }*/
+
+    rankings.clear();
+    threads.clear();
+
+    for (int pointer : pointers) {
+        startThread(pointer, local_pointer);
+    }
+
+    // Join all threads
+    for (auto& thread : threads) {
+        thread.join();
     }
 
     int biggest = 0;
@@ -155,13 +224,13 @@ void CopyModel::copyModel()
     }
 
     this->totalNumberOfBits += winner_information;
-    this->totalNumberOfBits += -std::log2(rankings.size());;
+    this->totalNumberOfBits += -std::log2(rankings.size());
 
     std::cout << "Finished " << currentKString << std::endl;
     std::cout << "Best Pointer: " << winner_pointer << std::endl;
 
 
-    globalPointer += biggest;
+    globalPointer += biggest -1;
     incrementGlobalPointer();
     
     // Exit loop meaning the copy model accuracy is too low
