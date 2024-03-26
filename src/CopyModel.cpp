@@ -197,6 +197,8 @@ void CopyModel::copyModel()
     }*/
 
     rankings.clear();
+    threads.clear();
+
     for (int pointer : pointers) {
         startThread(pointer, local_pointer);
     }
@@ -205,8 +207,6 @@ void CopyModel::copyModel()
     for (auto& thread : threads) {
         thread.join();
     }
-
-    threads.clear();
 
     int biggest = 0;
     int winner_pointer;
@@ -224,7 +224,7 @@ void CopyModel::copyModel()
     }
 
     this->totalNumberOfBits += winner_information;
-    this->totalNumberOfBits += -std::log2(rankings.size());;
+    this->totalNumberOfBits += -std::log2(rankings.size());
 
     std::cout << "Finished " << currentKString << std::endl;
     std::cout << "Best Pointer: " << winner_pointer << std::endl;
