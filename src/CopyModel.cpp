@@ -104,7 +104,7 @@ void CopyModel::copyModel()
 
     // Compara o simbolo da posição atual com o simbolo da posição do copy model anterior
     double prediction = stats.getProbability();
-    while (prediction > threshold || globalPointer < (int)originalText.size())
+    while (prediction > threshold && globalPointer < (int)originalText.size())
     {
         if (originalText[copyPointer] == originalText[globalPointer])
         {
