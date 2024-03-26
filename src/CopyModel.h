@@ -2,6 +2,7 @@
 #define COPY_MODEL_H
 
 #include "Reader.h"
+#include <map>
 
 
 class CopyModel {
@@ -26,13 +27,12 @@ private:
 public:
     CopyModel(std::string originalText, std::vector<char> alphabet, int k, double threshold, double alpha, int fallbackWindowSize);
 
-    void run();
+    std::map<std::string, double> run();
 
     std::string findCopyModel();
     void copyModel();
     void fallbackModel();
     void incrementGlobalPointer();
-    int getStats();
 };
 
 #endif

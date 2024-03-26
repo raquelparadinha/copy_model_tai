@@ -1,34 +1,58 @@
 [
   {
-    "t": 0.1,
-    "totalNumberOfBits": 45139471
+    "threshold": 0.1,
+    "totalNumberOfBits": 4.51395e+07,
+    "executionTime": 14.461,
+    "averageBitsPerSymbol": 1.99131,
+    "compressionRatio": 4.01746,
   },
   {
-    "t": 0.15,
-    "totalNumberOfBits": 45139471
+    "threshold": 0.15,
+    "totalNumberOfBits": 4.51395e+07,
+    "executionTime": 14.61,
+    "averageBitsPerSymbol": 1.99131,
+    "compressionRatio": 4.01746,
   },
   {
-    "t": 0.2,
-    "totalNumberOfBits": 45139471
+    "threshold": 0.2,
+    "totalNumberOfBits": 4.51395e+07,
+    "executionTime": 14.549,
+    "averageBitsPerSymbol": 1.99131,
+    "compressionRatio": 4.01746,
   },
   {
-    "t": 0.25,
-    "totalNumberOfBits": 45139471
+    "threshold": 0.25,
+    "totalNumberOfBits": 4.51395e+07,
+    "executionTime": 14.594,
+    "averageBitsPerSymbol": 1.99131,
+    "compressionRatio": 4.01746,
   },
   {
-    "t": 0.3,
-    "totalNumberOfBits": 45218697
+    "threshold": 0.3,
+    "totalNumberOfBits": 4.52187e+07,
+    "executionTime": 14.609,
+    "averageBitsPerSymbol": 1.99481,
+    "compressionRatio": 4.01042,
   },
   {
-    "t": 0.35,
-    "totalNumberOfBits": 47394030
+    "threshold": 0.35,
+    "totalNumberOfBits": 4.7394e+07,
+    "executionTime": 15.458,
+    "averageBitsPerSymbol": 2.09077,
+    "compressionRatio": 3.82634,
   },
   {
-    "t": 0.4,
-    "totalNumberOfBits": 48512710
+    "threshold": 0.4,
+    "totalNumberOfBits": 4.85127e+07,
+    "executionTime": 16.084,
+    "averageBitsPerSymbol": 2.14012,
+    "compressionRatio": 3.73811,
   },
   {
-    "t": 0.45,
-    "totalNumberOfBits": 49554446
+    "threshold": 0.45,
+    "totalNumberOfBits": 4.95544e+07,
+    "executionTime": 16.787,
+    "averageBitsPerSymbol": 2.18608,
+    "compressionRatio": 3.65953,
   }
 ]

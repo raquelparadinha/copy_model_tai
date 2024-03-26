@@ -1,54 +1,93 @@
 [
   {
     "k": 3,
-    "totalNumberOfBits": 47226021
+    "totalNumberOfBits": 4.7226e+07,
+    "executionTime": 3.043,
+    "averageBitsPerSymbol": 2.08336,
+    "compressionRatio": 3.83996,
   },
   {
     "k": 4,
-    "totalNumberOfBits": 47337550
+    "totalNumberOfBits": 4.73376e+07,
+    "executionTime": 3.322,
+    "averageBitsPerSymbol": 2.08828,
+    "compressionRatio": 3.83091,
   },
   {
     "k": 5,
-    "totalNumberOfBits": 47349527
+    "totalNumberOfBits": 4.73495e+07,
+    "executionTime": 3.336,
+    "averageBitsPerSymbol": 2.08881,
+    "compressionRatio": 3.82994,
   },
   {
     "k": 6,
-    "totalNumberOfBits": 46651274
+    "totalNumberOfBits": 4.66513e+07,
+    "executionTime": 3.34,
+    "averageBitsPerSymbol": 2.058,
+    "compressionRatio": 3.88726,
   },
   {
     "k": 7,
-    "totalNumberOfBits": 46506584
+    "totalNumberOfBits": 4.65066e+07,
+    "executionTime": 3.773,
+    "averageBitsPerSymbol": 2.05162,
+    "compressionRatio": 3.89936,
   },
   {
     "k": 8,
-    "totalNumberOfBits": 46376753
+    "totalNumberOfBits": 4.63768e+07,
+    "executionTime": 4.949,
+    "averageBitsPerSymbol": 2.04589,
+    "compressionRatio": 3.91027,
   },
   {
     "k": 9,
-    "totalNumberOfBits": 45899218
+    "totalNumberOfBits": 4.58992e+07,
+    "executionTime": 8.076,
+    "averageBitsPerSymbol": 2.02483,
+    "compressionRatio": 3.95096,
   },
   {
     "k": 10,
-    "totalNumberOfBits": 45435997
+    "totalNumberOfBits": 4.5436e+07,
+    "executionTime": 12.048,
+    "averageBitsPerSymbol": 2.00439,
+    "compressionRatio": 3.99124,
   },
   {
     "k": 11,
-    "totalNumberOfBits": 45287585
+    "totalNumberOfBits": 4.52876e+07,
+    "executionTime": 16.353,
+    "averageBitsPerSymbol": 1.99784,
+    "compressionRatio": 4.00432,
   },
   {
     "k": 12,
-    "totalNumberOfBits": 45218697
+    "totalNumberOfBits": 4.52187e+07,
+    "executionTime": 15.274,
+    "averageBitsPerSymbol": 1.99481,
+    "compressionRatio": 4.01042,
   },
   {
     "k": 13,
-    "totalNumberOfBits": 45183918
+    "totalNumberOfBits": 4.51839e+07,
+    "executionTime": 16.569,
+    "averageBitsPerSymbol": 1.99327,
+    "compressionRatio": 4.0135,
   },
   {
     "k": 14,
-    "totalNumberOfBits": 45178308
+    "totalNumberOfBits": 4.51783e+07,
+    "executionTime": 16.127,
+    "averageBitsPerSymbol": 1.99302,
+    "compressionRatio": 4.014,
   },
   {
     "k": 15,
-    "totalNumberOfBits": 45177623
+    "totalNumberOfBits": 4.51776e+07,
+    "executionTime": 16.065,
+    "averageBitsPerSymbol": 1.99299,
+    "compressionRatio": 4.01406,
   }
 ]

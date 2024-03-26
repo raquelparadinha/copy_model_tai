@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <iomanip> // For std::setw
 #include <limits>
+#include <map>
 #include "Reader.h"
 #include "CopyModel.h"
 #include "Stats.h"
@@ -22,14 +23,17 @@ void runAndSaveResultsForK(const std::string& originalText, const std::vector<ch
         
         // Setup and run the CopyModel
         CopyModel copyModel(originalText, alphabet, k, referenceThreshold, referenceAlpha, referenceFallbackWindowSize);
-        copyModel.run();
+        std::map<std::string, double> results;
+        results = copyModel.run();
 
-        int totalNumberOfBits = copyModel.getStats(); // Ensure getStats() or equivalent method exists
 
         // Prepare JSON entry for current configuration
         outFile << "  {" << std::endl;
         outFile << "    \"k\": " << k << "," << std::endl;
-        outFile << "    \"totalNumberOfBits\": " << totalNumberOfBits << std::endl;
+        outFile << "    \"totalNumberOfBits\": " << results["totalBits"] << "," << std::endl;
+        outFile << "    \"executionTime\": " << results["executionTime"] << "," << std::endl;
+        outFile << "    \"averageBitsPerSymbol\": " << results["averageBitsPerSymbol"] << "," << std::endl;
+        outFile << "    \"compressionRatio\": " << results["compressionRatio"] << std::endl;
         outFile << "  }";
     }
 
@@ -50,14 +54,16 @@ void runAndSaveResultsForT(const std::string& originalText, const std::vector<ch
         
         // Setup and run the CopyModel
         CopyModel copyModel(originalText, alphabet, referenceK, t, referenceAlpha, referenceFallbackWindowSize);
-        copyModel.run();
-
-        int totalNumberOfBits = copyModel.getStats(); // Ensure getStats() or equivalent method exists
+        std::map<std::string, double> results;
+        results = copyModel.run();
 
         // Prepare JSON entry for current configuration
         outFile << "  {" << std::endl;
-        outFile << "    \"t\": " << t << "," << std::endl;
-        outFile << "    \"totalNumberOfBits\": " << totalNumberOfBits << std::endl;
+        outFile << "    \"threshold\": " << t << "," << std::endl;
+        outFile << "    \"totalNumberOfBits\": " << results["totalBits"] << "," << std::endl;
+        outFile << "    \"executionTime\": " << results["executionTime"] << "," << std::endl;
+        outFile << "    \"averageBitsPerSymbol\": " << results["averageBitsPerSymbol"] << "," << std::endl;
+        outFile << "    \"compressionRatio\": " << results["compressionRatio"] << std::endl;
         outFile << "  }";
     }
 
@@ -78,14 +84,17 @@ void runAndSaveResultsForA(const std::string& originalText, const std::vector<ch
         
         // Setup and run the CopyModel
         CopyModel copyModel(originalText, alphabet, referencek, referenceThreshold, a, referenceFallbackWindowSize);
-        copyModel.run();
+        std::map<std::string, double> results;
+        results = copyModel.run();
 
-        int totalNumberOfBits = copyModel.getStats(); // Ensure getStats() or equivalent method exists
 
         // Prepare JSON entry for current configuration
         outFile << "  {" << std::endl;
-        outFile << "    \"a\": " << a << "," << std::endl;
-        outFile << "    \"totalNumberOfBits\": " << totalNumberOfBits << std::endl;
+        outFile << "    \"alpha\": " << a << "," << std::endl;
+        outFile << "    \"totalNumberOfBits\": " << results["totalBits"] << "," << std::endl;
+        outFile << "    \"executionTime\": " << results["executionTime"] << "," << std::endl;
+        outFile << "    \"averageBitsPerSymbol\": " << results["averageBitsPerSymbol"] << "," << std::endl;
+        outFile << "    \"compressionRatio\": " << results["compressionRatio"] << std::endl;
         outFile << "  }";
     }
 
@@ -106,14 +115,17 @@ void runAndSaveResultsForWS(const std::string& originalText, const std::vector<c
         
         // Setup and run the CopyModel
         CopyModel copyModel(originalText, alphabet, referenceK, referenceThreshold, referenceAlpha, ws);
-        copyModel.run();
+        std::map<std::string, double> results;
+        results = copyModel.run();
 
-        int totalNumberOfBits = copyModel.getStats(); // Ensure getStats() or equivalent method exists
 
         // Prepare JSON entry for current configuration
         outFile << "  {" << std::endl;
-        outFile << "    \"WS\": " << ws << "," << std::endl;
-        outFile << "    \"totalNumberOfBits\": " << totalNumberOfBits << std::endl;
+        outFile << "    \"windowSize\": " << ws << "," << std::endl;
+        outFile << "    \"totalNumberOfBits\": " << results["totalBits"] << "," << std::endl;
+        outFile << "    \"executionTime\": " << results["executionTime"] << "," << std::endl;
+        outFile << "    \"averageBitsPerSymbol\": " << results["averageBitsPerSymbol"] << "," << std::endl;
+        outFile << "    \"compressionRatio\": " << results["compressionRatio"] << std::endl;
         outFile << "  }";
     }
 
