@@ -1,48 +1,48 @@
 [
   {
-    "windowSize": 150,
+    "fallbackWindowSize": 150,
     "totalNumberOfBits": 4.52187e+07,
     "executionTime": 14.466,
     "averageBitsPerSymbol": 1.99481,
     "compressionRatio": 4.01042
   },
   {
-    "windowSize": 175,
+    "fallbackWindowSize": 175,
     "totalNumberOfBits": 4.52187e+07,
     "executionTime": 14.486,
     "averageBitsPerSymbol": 1.99481,
     "compressionRatio": 4.01042
   },
   {
-    "windowSize": 200,
+    "fallbackWindowSize": 200,
     "totalNumberOfBits": 4.52187e+07,
     "executionTime": 14.432,
     "averageBitsPerSymbol": 1.99481,
     "compressionRatio": 4.01042
   },
   {
-    "windowSize": 225,
+    "fallbackWindowSize": 225,
     "totalNumberOfBits": 4.52187e+07,
     "executionTime": 15.599,
     "averageBitsPerSymbol": 1.99481,
     "compressionRatio": 4.01042
   },
   {
-    "windowSize": 250,
+    "fallbackWindowSize": 250,
     "totalNumberOfBits": 4.52187e+07,
     "executionTime": 17.126,
     "averageBitsPerSymbol": 1.99481,
     "compressionRatio": 4.01042
   },
   {
-    "windowSize": 275,
+    "fallbackWindowSize": 275,
     "totalNumberOfBits": 4.52187e+07,
     "executionTime": 16.663,
     "averageBitsPerSymbol": 1.99481,
     "compressionRatio": 4.01042
   },
   {
-    "windowSize": 300,
+    "fallbackWindowSize": 300,
     "totalNumberOfBits": 4.52187e+07,
     "executionTime": 15.607,
     "averageBitsPerSymbol": 1.99481,

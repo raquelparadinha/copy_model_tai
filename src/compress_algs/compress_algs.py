@@ -13,7 +13,6 @@ def compress_measure(command_compress, input_file, output_dir, extension, needs_
     compressed_file_path = output_dir / f"{input_file.stem}.{extension}"
 
     print(f"command_compress: {command_compress}")
-    # Measure compression
     start_time = time.time()
     subprocess.run(command_compress, shell=True)
     compression_time = time.time() - start_time

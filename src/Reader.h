@@ -14,10 +14,8 @@ private:
     std::vector<char> alphabet;
 
 public:
-    // Constructor
     Reader(const std::string& filePath);
 
-    // Function to read the file byte-wise
     void readFile();
 
     std::string getContent();
@@ -25,4 +23,4 @@ public:
     std::vector<char> getAlphabet();
 };
 
-#endif // READER_H
+#endif 

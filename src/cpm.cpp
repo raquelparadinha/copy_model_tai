@@ -20,12 +20,11 @@ void printUsage() {
 
 int main(int argc, char* argv[]) {
     std::string filename = "example/chry.txt";
-    int k = 3;
+    int k = 12;
     double threshold = 0.3;
-    double alpha = 1;
+    double alpha = 0.8;
     int fallbackWindowSize = 200;
 
-    // Parse command line arguments
     int opt;
     while((opt = getopt(argc, argv, "f:k:t:a:w:h")) != -1) {
         switch (opt)
