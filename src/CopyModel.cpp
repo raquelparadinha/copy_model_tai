@@ -33,7 +33,7 @@ CopyModel::CopyModel(std::string oT, std::vector<char> alphabet, int k, double t
  * corre esta coisa toda
  *
  */
-void CopyModel::run()
+std::map<std::string, double> CopyModel::run()
 {
     std::string match;
 
@@ -54,12 +54,27 @@ void CopyModel::run()
     auto end = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
 
+    double executionTime = duration.count() / 1000.0;
+    double totalBits = static_cast<double>(totalNumberOfBits);
+    double averageBitsPerSymbol = totalNumberOfBits / static_cast<double>(originalText.size());
+    double compressionRatio = (static_cast<double>(originalText.size()) * 8) / totalNumberOfBits;
+    double compressionPercentage = (1 - (totalNumberOfBits / (static_cast<double>(originalText.size()) * 8))) * 100;
+
     std::cout << std::endl << "Done. Results:"<< std::endl;
-    std::cout << "Execution time: " << duration.count() << " milliseconds" << std::endl;
-    std::cout << "Total number of bits: " << (double)totalNumberOfBits << std::endl;
-    std::cout << "Average number of bits per symbol: " << (double)(totalNumberOfBits / originalText.size()) << std::endl;
-    std::cout << "Compression ratio: " << ((double)originalText.size() * 8) / totalNumberOfBits << std::endl;
-    std::cout << "Compression percentage: " << (1 - (totalNumberOfBits / (originalText.size() * 8))) * 100 << "%" << std::endl;
+    std::cout << "Execution time: " << executionTime << " seconds" << std::endl;
+    std::cout << "Total number of bits: " << totalBits << std::endl;
+    std::cout << "Average number of bits per symbol: " << averageBitsPerSymbol << std::endl;
+    std::cout << "Compression ratio: " << compressionRatio << std::endl;
+    std::cout << "Compression percentage: " << compressionPercentage << "%" << std::endl;
+
+
+    std::map<std::string, double> results;
+    results.insert(std::make_pair("executionTime", executionTime));
+    results.insert(std::make_pair("totalBits", totalBits));
+    results.insert(std::make_pair("averageBitsPerSymbol", averageBitsPerSymbol));
+    results.insert(std::make_pair("compressionRatio", compressionRatio));
+
+    return results;
 }
 
 /**

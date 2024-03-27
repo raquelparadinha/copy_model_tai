@@ -1,6 +1,9 @@
 #ifndef COPY_MODEL_H
 #define COPY_MODEL_H
 
+#include "Reader.h"
+#include <map>
+
 #include <unordered_map>
 #include <vector>
 #include <string>
@@ -27,7 +30,7 @@ private:
 public:
     CopyModel(std::string originalText, std::vector<char> alphabet, int k, double threshold, double alpha, int fallbackWindowSize);
 
-    void run();
+    std::map<std::string, double> run();
 
     std::string findCopyModel();
     void copyModel();

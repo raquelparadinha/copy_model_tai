@@ -1,0 +1,27 @@
+{
+    "gzip": {
+        "compression_ratio": 2.043494286767416,
+        "compressed_size_bits": 21704,
+        "compression_time_seconds": 0.009252071380615234
+    },
+    "bzip2": {
+        "compression_ratio": 2.1438515081206497,
+        "compressed_size_bits": 20688,
+        "compression_time_seconds": 0.010041236877441406
+    },
+    "xz": {
+        "compression_ratio": 2.0028901734104045,
+        "compressed_size_bits": 22144,
+        "compression_time_seconds": 0.010545969009399414
+    },
+    "lz4": {
+        "compression_ratio": 1.3326923076923076,
+        "compressed_size_bits": 33280,
+        "compression_time_seconds": 0.007504701614379883
+    },
+    "zstd": {
+        "compression_ratio": 2.006514657980456,
+        "compressed_size_bits": 22104,
+        "compression_time_seconds": 0.009129047393798828
+    }
+}
