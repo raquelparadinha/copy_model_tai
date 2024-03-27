@@ -1,17 +1,31 @@
 # tai_grupo11
 
-## How to run cpm program
-
-``` 
-cd src
-make clean
+## Instructions
+### Compilation 
+From the root folder of the repo, compile the binaries:
+```bash
 make all
-./cpm -f <string> -k <int> -t <double> -a <double> -w <int>
 ```
 
-## How to run mutate program
+#### CPM
+Run the CPM program:
+```bash
+bin/cpm -f <filename> -k <length of sequence> -a <alpha> -t <threshold> -w <fallback window size>
+```
 
+#### CPM Tuning
+CPM Tuning workflow:
+```bash
+# (optional) tweak reference values and recompile the binaries
+bin/cpm_tuning
+pushd src/plotting
+python3 plots.py
+popd
 ```
-cd bin 
-./mutate <input file> <output file> <mutation probability>
+
+#### Mutate
+Run the Mutate program:
+```bash
+bin/mutate <filename> <mutation probability>
 ```
+
