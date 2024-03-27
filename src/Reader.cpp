@@ -12,7 +12,7 @@ void Reader::readFile() {
 
     if (!file) {
         std::cerr << "Could not open the file - '" << filePath << "'" << std::endl;
-        return;
+        exit(1);
     }
 
     fileContent.clear(); 

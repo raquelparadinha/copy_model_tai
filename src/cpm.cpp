@@ -19,7 +19,7 @@ void printUsage() {
 
 
 int main(int argc, char* argv[]) {
-    std::string filename = "../example/chry.txt";
+    std::string filename = "example/chry.txt";
     int k = 3;
     double threshold = 0.3;
     double alpha = 1;
