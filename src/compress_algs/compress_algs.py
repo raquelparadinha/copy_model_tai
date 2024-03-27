@@ -77,7 +77,8 @@ def process_file(input_file_name, output_dir):
 
 def main():
     output_dir = create_output_dirs()
-    input_files = ["chry.txt", "abc.txt", "test.txt", "random_file.txt"]
+    #input_files = ["chry.txt", "abc.txt", "test.txt", "random_file.txt"]
+    input_files = ["1984_excerpt.txt"]
     
     for input_file in input_files:
         process_file(input_file, output_dir)
