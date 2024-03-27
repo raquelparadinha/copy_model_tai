@@ -1,6 +1,4 @@
 #include "Stats.h"
-#include "Reader.h"
-#include <algorithm>
 
 /**
  * @brief Constructs a Stats object.

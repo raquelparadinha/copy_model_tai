@@ -1,7 +1,6 @@
 #include "CopyModel.h"
-#include "Reader.h"
 #include "Stats.h"
-#include <algorithm>
+#include <iostream>
 #include <cmath>
 #include <map>
 #include <chrono>
@@ -13,7 +12,6 @@
  * @param t The value of threshold.
  * @param a The value of alpha.
  * @param oT The value of originalText.
- * @param kStringsPos The value of kStringsPositions.
  * @param alphabet The alphabet of the text.
  */
 CopyModel::CopyModel(std::string oT, std::vector<char> alphabet, int k, double t, double a, int window) : originalText(oT), alphabet(alphabet), k(k), threshold(t), alpha(a), fallbackWindowSize(window)
@@ -46,12 +44,10 @@ std::map<std::string, double> CopyModel::run()
         
         if (match != "")
         {
-            //std::cout << "Copy model" << std::endl;
             copyModel();
         }
         else
         {
-            //std::cout << "Fallback model" << std::endl;
             fallbackModel();
         }
     }

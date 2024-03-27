@@ -4,6 +4,9 @@
 #include "Reader.h"
 #include <map>
 
+#include <unordered_map>
+#include <vector>
+#include <string>
 
 class CopyModel {
 private:
@@ -20,10 +23,10 @@ private:
     int alphabetSize;
     std::unordered_map<std::string, std::vector<int>> pastKStrings;
 
-    std::string predictedText;
     std::string currentKString;
 
     double totalNumberOfBits;
+
 public:
     CopyModel(std::string originalText, std::vector<char> alphabet, int k, double threshold, double alpha, int fallbackWindowSize);
 
